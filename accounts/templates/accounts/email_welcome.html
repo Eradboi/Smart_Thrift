@@ -1,0 +1,99 @@
+<html>
+
+<head>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: white;
+      color: #333;
+    }
+
+    .the-div {
+      padding: 5px;
+      border-radius: 10px;
+      background-color: antiquewhite;
+    }
+
+    h2 {
+      font-weight: bolder;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+
+    h3 {
+      color: aqua;
+      background-color: white;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0px 3px 0px lightblue;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <img height="33" src="https://res.cloudinary.com/dqihcau09/image/upload/v1705198303/logo_l1kgdq.png" alt="Our Logo">
+  </div>
+  <h1>You Just Created An Account With Us At Smart Thrift</h1>
+  <hr>
+  <div class="the-div">
+    <p>Dear <em>{{ name|safe }}</em></p>
+    <p>We are thrilled to welcome you to Smart Thrift, where smart financial choices begin and where your journey
+      towards saving money takes flight! 🚀</p>
+    <p>As a valued member of our community, you are now part of a network of individuals dedicated to achieving
+      financial goals, making informed decisions, and embracing a brighter financial future.</p>
+    <p>To get started, <a href="{% url 'login' %}">log in to your account</a> and explore the tools and resources
+      available to you. If you have any questions or need assistance, <a href="mailto:smatrhthriftsavings@gmail.com">our
+        dedicated support team</a> is ready to help.</p>
+    <br>
+    <h3>Features</h3>
+    <p>Locked Plans:</p>
+    <p>Choose from our range of locked plans, including monthly, quarterly, 6 months, yearly, and multiple years. Each
+      plan is designed to provide you with the flexibility and stability you need for successful money management.</p>
+
+    <p>Deposit Options:</p>
+    <p>Enjoy the convenience of deposit options that suit your preferences. Whether you prefer to make optional deposits
+      or set up automatic deposits (daily, weekly, or monthly), we've got you covered</p>
+    <small>You are in the {{ category|safe }} Category</small>
+    <p>Thank you for choosing Smart Thrift as your partner in financial success. We look forward to supporting you on
+      your journey towards a more financially secure future.</p>
+    <p>Here's to a prosperous and money-smart relationship!</p>
+    <br>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+
+            <p>Thank you for saving with Smart Thrift</p>
+            <p>The Smart Thrift Team.</p>
+          </td>
+        </tr>
+        <tr>
+          <td height="20" style="line-height:20px">&nbsp;</td>
+        </tr>
+        <tr>
+          <td height="20" style="line-height:20px">&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+    <tr>
+      <td width="15px" style="width:15px"></td>
+      <td width="20" style="display:block;width:20px">&nbsp;&nbsp;&nbsp;</td>
+      <td style="text-align:center">
+        <div style="padding-top:10px;display:flex">
+          <div style="margin:auto"><img
+              src="https://res.cloudinary.com/dqihcau09/image/upload/v1704712876/logo_m4of8w.png" height="20" width="20"
+              alt="logo"></div><br>
+        </div>
+        <div style="height:10px"></div>
+        <div style="color:#abadae;font-size:11px;margin:0 auto 5px auto">© Smart Thrift, Inc., Futa South Gate, Akure,
+          Nigeria<br></div>
+        <div style="color:#abadae;font-size:11px;margin:0 auto 5px auto">For More Information <a
+            href="mailto:smartthriftsavings@gmail.com">Contact Us</a><br></div>
+      </td>
+      <td width="20" style="display:block;width:20px">&nbsp;&nbsp;&nbsp;</td>
+      <td width="15px" style="width:15px"></td>
+    </tr>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'accounts/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Smart Thrift | Login {% endblock %}</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100vh;
+      /* Set the body height to 100% of the viewport height */
+    }
+
+    section {
+      width: 95%;
+      margin: auto;
+    }
+
+    a {
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  {% for message in messages %}
+  {% if message.tags == "success" %}
+  <div class="toast show">
+    <div class="toast-header">
+      Notification
+      <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+    </div>
+    <div class="toast-body">
+      {{ message }}
+    </div>
+  </div>
+  {% endif %}
+  {% endfor %}
+  <br>
+  <section class="bg-white">
+    <div class="container py-5 h-100" style="border-radius: 25px; border: rgb(236, 240, 248) solid 1px;">
+      <div class="row d-flex align-items-center justify-content-center h-100">
+        <div class="col-md-8 col-lg-7 col-xl-6">
+          <img src="{% static 'login-banner.jpg' %}" class="img-fluid" alt="Phone image">
+        </div>
+        <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+          <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"><img src="{% static 'logo.png' %}" height="36"
+              alt="Smart Thrift Logo" loading="lazy" style="margin-top: -1px;" /> Smart Thrift Login</p>
+
+          <form action="{% url 'user-login' %}" method="post">
+            {% csrf_token %}
+            <!-- Username input -->
+            <div class="form-outline mb-4">
+              <label for="{{ form.username.id_for_label }}">Username</label>
+              <div hx-post="/check_username2/" hx-target="#username-error" hx-trigger="keyup">
+                {{ form.username}}
+              </div>
+
+              <p style="color: rgb(18, 122, 36); font-size: 12px;" id="username-error"></p>
+            </div>
+
+            <!-- Password input -->
+            <div class="form-outline mb-4">
+              <label for="{{ form.password.id_for_label }}">Password</label>
+              <div>
+                {{form.password}}
+                <i class="fa-solid fa-eye-slash" id="togglePassword"></i>
+              </div>
+              {% if form.errors %}
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <small>Please enter a correct username and password. Note that both fields may be
+                  case-sensitive.</small>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+              {% endif %}
+            </div>
+
+            <div class="form-outline mb-4">
+              <p>Don't have an account? Create one <a href="{% url 'register' %}">here</a></p>
+              <a href="{% url 'password_reset' %}">Forgot password?</a>
+
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Log in</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    const togglePassword = document
+      .querySelector('#togglePassword');
+    const password = document.querySelector('#id_password');
+    togglePassword.addEventListener('click', () => {
+      // Toggle the type attribute using
+      // getAttribure() method
+      const type = password
+        .getAttribute('type') === 'password' ?
+        'text' : 'password';
+      password.setAttribute('type', type);
+      // Toggle the eye and bi-eye icon
+      this.classList.toggle('bi-eye');
+    });
+  </script>
+</body>
+{% endblock %}
+
+</html>

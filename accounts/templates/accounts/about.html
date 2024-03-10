@@ -1,0 +1,201 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Smart Thrift | About Us {% endblock %}</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            /* Set the body height to 100% of the viewport height */
+        }
+
+        .blue {
+            background-image: url("{% static 'blurry-gradient-haikei.png' %}");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            color: white;
+            text-decoration: none;
+            height: max-content;
+
+        }
+
+        .blue a {
+            color: white;
+        }
+
+        .displayed {
+            font-family: 'Poppins', sans-serif;
+            font-size: 50px;
+        }
+
+        h2 {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class=" blue">
+        <div class="container py-5">
+            <div class="row h-100 align-items-center py-5">
+                <div class="col-lg-6">
+                    <h1 class="displayed">About Us Page</h1>
+                    <p class="lead mb-0">Smart Thrift: Save Money Smart</p>
+                    <p class="lead ">A Secure Digital Piggy Bank by<a href="https://x.com/eradboi">
+                            <u>Erad Creates</u></a>
+                    </p><a href="{% url 'register' %}" class="btn btn-primary px-5 rounded-pill shadow-sm">Sign Up</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white py-5">
+        <div class="container py-5">
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-6 order-2 order-lg-1"><i class="fa fa-bar-chart fa-2x mb-3 text-primary"></i>
+                    <h2 class="font-weight-light">Secure Deposit</h2>
+                    <p class="font-italic text-muted mb-4">Securely Deposit Money To Your Saving Plans With Our Safe
+                        Deposit Feature</p>
+                </div>
+                <div class="col-lg-5 px-5 mx-auto order-1 order-lg-2"><img src="{% static 'laptop-man.jpg' %}" alt=""
+                        class="img-fluid mb-4 mb-lg-0"></div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-lg-5 px-5 mx-auto"><img src="{% static 'laptop.jpg' %}" alt=""
+                        class="img-fluid mb-4 mb-lg-0"></div>
+                <div class="col-lg-6"><i class="fa fa-leaf fa-2x mb-3 text-primary"></i>
+                    <h2 class="font-weight-light">Timely Withdrawal</h2>
+                    <p class="font-italic text-muted mb-4">Withdraw Your Money Safely And Swiftly To Your Bank Account
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bg-light py-5">
+        <div class="container py-5">
+            <div class="row mb-4">
+                <div class="col-lg-5">
+                    <h2 class="display-4 font-weight-light">Saving Options</h2>
+                    <p class="font-italic text-muted">Explore our range of secured savings plans tailored to meet your
+                        financial goals.</p>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-xl-3 col-sm-6 mb-5">
+                    <div class="card">
+                        <img src="{% static 'one.jpg' %}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text">Secure your funds and make withdrawals after a 30-day period to access
+                                your savings.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-5">
+                    <div class="card">
+                        <img src="{% static 'three.jpg' %}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text">Secure your funds and make withdrawals after a 90-day period to access
+                                your savings.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-5">
+                    <div class="card">
+                        <img src="{% static 'six.jpg' %}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text">Secure your funds and make withdrawals after a 180-day period to access
+                                your savings.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-5">
+                    <div class="card">
+                        <img src="{% static 'year.jpg' %}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text">Secure your funds and make withdrawals after a year or multiple years
+                                to access your savings.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="bg-light py-5">
+        <div class="container py-5">
+            <div class="row mb-4">
+                <div class="col-lg-5">
+                    <h2 class="display-4 font-weight-light">Deposit Options</h2>
+                    <p class="font-italic text-muted">Explore our various deposit options with secured deposits using
+                        Flutterwave</p>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-xl-3 col-sm-6 mb-5">
+                    <div class="card">
+                        <img src="{% static 'optional.jpg' %}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text">Make One-off deposits to your plans at any time</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-5">
+                    <div class="card">
+                        <img src="{% static 'automatic.jpg' %}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text">Relax any set a time trigger (daily, weekly and monthly) with your bank
+                                card to automatically deposit funds to your plans</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="bg-light py-5">
+        <div class="container py-5">
+            <div style="background-color: rgb(201, 223, 253); padding: 3px; border-radius: 3px;">
+                <p><i class="fa-solid fa-circle-info"></i> Note that charges are removed by <a
+                        href="https://www.flutterwave.com">Flutterwave</a> after each
+                    deposit and the final amount will be
+                    remitted to your savings plan.</p>
+                <p>You can view their charge rate here</p>
+                <p><i class="fa-solid fa-circle-info"></i> All Transactions on Smart Thrift is secured by <a
+                        href="https://www.flutterwave.com">Flutterwave</a></p>
+            </div>
+            <br>
+            <div class="card">
+                <div class="card-header">
+                    Quote
+                </div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <p>
+                            "Saving money is not about being rich; it's about being wise. As the saying goes, 'A penny
+                            saved is a penny earned.' Invest in your financial well-being, and watch your savings grow."
+                        </p>
+                        <footer class="blockquote-footer">Warren Buffett</footer>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+{% endblock %}

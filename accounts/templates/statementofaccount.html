@@ -1,0 +1,204 @@
+<html>
+{% load static %}
+
+<head>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: white;
+    }
+
+    .the-div {
+      padding: 5px;
+      border-radius: 10px;
+    }
+
+    h2 {
+      font-weight: bolder;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+
+    h1 {
+      font-size: 50px;
+    }
+
+    h3 {
+      color: rgb(194, 214, 245);
+      font-size: 30px;
+    }
+
+    .statement-flex-b {
+      display: grid;
+      margin: auto;
+      width: 90%;
+      background-color: rgb(194, 214, 245);
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .statement-flex-b h6 {
+      color: white;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .statement-flex-b h4 {
+      font-size: 20px;
+      color: rgb(255, 255, 255);
+      margin: 0;
+      font-family: 'Oswald', sans-serif;
+      padding: 5px;
+    }
+
+    .statement-box {
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+    .statement-inner {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div style="background-color: #d7f0fd;width: 60;padding: 10px;border-radius: 30;">
+    <img src="https://res.cloudinary.com/dqihcau09/image/upload/v1705198303/logo_l1kgdq.png" height="50" width="50"
+      alt="Our Logo">
+  </div>
+  <div>
+    <h1>STATEMENT OF ACCOUNT</h1>
+  </div>
+
+  <div class="the-div">
+    <p>For <em>{{ name|safe }}</em></p>
+    <p>Category: {{ category|safe }}</p>
+    <p>Email: {{ email|safe }}</p>
+    <br>
+    <div>
+      <p>TOTAL BALANCE:</p>
+      <table style="background-color: rgb(62, 107, 255);">
+
+        <thead>
+          <tr>
+            <th scope="col">Currency</th>
+            <th scope="col">Balance</th>
+            <th scope="col">Plans</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background-color: rgb(175, 210, 255);">
+            <th scope="row">Naira</th>
+            <td>₦{{ all_NGN }}</td>
+            <td>{{ NGN }}</td>
+          </tr>
+          <tr style="background-color: rgb(175, 210, 255);">
+            <th scope="row">Dollars</th>
+            <td>${{ all_USD }}</td>
+            <td>{{ USD }}</td>
+          </tr>
+          <tr style="background-color: rgb(175, 210, 255);">
+            <th scope="row">British Pounds</th>
+            <td>&#163;{{ all_GBP }}</td>
+            <td>{{ GBP }}</td>
+          </tr>
+          <tr style="background-color: rgb(175, 210, 255);">
+            <th scope="row">Euros</th>
+            <td>&euro;{{ all_EUR }}</td>
+            <td>{{ EUR }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+
+    </div>
+    {% if plans %}
+    <p>ALL PLANS:</p>
+    <table style="background-color: rgb(62, 107, 255);">
+
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Balance</th>
+          <th scope="col">Date Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for plan in plans %}
+        <tr style="background-color: rgb(175, 210, 255);">
+          <th scope="row">{{ plan.name }}</th>
+          {% if plan.currency == 'USD' %}
+          <td class="two">$ {{ plan.balance }}</td>
+          {% endif %}
+          {% if plan.currency == 'NGN' %}
+          <td class="two">&#x20A6; {{ plan.balance }}</td>
+          {% endif %}
+          {% if plan.currency == 'GBP' %}
+          <td class="two">&#163; {{ plan.balance }}</td>
+          {% endif %}
+          {% if plan.currency == 'EUR' %}
+          <td class="two">&euro; {{ plan.balance }}</td>
+          {% endif %}
+          <td>{{ plan.date_created }} UTC</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <br>
+    {% endif %}
+    {% if trans %}
+    <p>ALL TRANSACTIONS:</p>
+    <div>
+
+      <table style="background-color: rgb(62, 107, 255);">
+
+        <thead style="background-color: #d7f0fd;">
+          <tr>
+            <th scope="col">Time</th>
+            <th scope="col">Plan</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Charge</th>
+          </tr>
+        </thead>
+        <tbody style="background-color: #d7f0fd;">
+          {% for transactions in trans %}
+          <tr style="background-color: #d7f0fd;">
+
+            <th scope="row">{{ transactions.date }} U.T.C</th>
+            <td>{{ transactions.plan }}</td>
+            {% if transactions.transaction_type == "credit" %}
+            <td style="color: rgb(8, 187, 8);">{{ transactions.amount }}</td>
+            <td>{{ transactions.charge }}</td>
+            {% else %}
+            <td style="color: red;">{{ transactions.amount }}</td>
+            <td>{{ transactions.charge }}</td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <br>
+    {% endif %}
+    <div>
+      <div>
+        <p>Thank you for saving with Smart Thrift</p>
+
+      </div>
+      <div>
+        <p>The Smart Thrift Team.</p>
+      </div>
+    </div>
+    <div class="statement-flex-b">
+
+      <div><img src="https://res.cloudinary.com/dqihcau09/image/upload/v1704712876/logo_m4of8w.png" height="20"
+          width="20" alt="logo"></div><br>
+      <div style="color:#abadae;font-size:11px;">© Smart Thrift, Inc., Futa South Gate, Akure,
+        Nigeria</div>
+      <div style="color:#abadae;font-size:11px;">For More Information <a
+          href="mailto:smartthriftsavings@gmail.com">Contact Us</a></div>
+    </div>
+</body>
+
+</html>

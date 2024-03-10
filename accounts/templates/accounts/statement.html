@@ -1,0 +1,421 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_filters %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Smart Thrift | Account Statement {% endblock %}</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            /* Set the body height to 100% of the viewport height */
+        }
+
+        .top {
+            margin-top: 10px;
+        }
+
+        .plan-head {
+            background-color: white;
+
+            width: auto;
+            font-family: 'Kanit', sans-serif;
+            padding: 5px;
+        }
+
+        .statement-flex {
+            overflow: auto;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            column-gap: 10px;
+            padding: 10px;
+            width: 90%;
+            margin: auto;
+            background-color: white;
+            border-radius: 10px;
+        }
+
+        .statement-flex-stat-stat {
+            overflow: auto;
+            display: grid;
+            grid-template-columns: 0.4fr 1fr;
+            column-gap: 10px;
+            padding: 10px;
+            width: 90%;
+            margin: auto;
+            border-radius: 10px;
+        }
+
+        .statement-flex-statbox {
+            overflow: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            column-gap: 10px;
+            padding: 10px;
+            width: 90%;
+            margin: auto;
+            background-color: rgb(221, 221, 221);
+            border-radius: 10px;
+        }
+
+        .statement-flex h1 {
+            width: auto;
+            font-family: 'Kanit', sans-serif;
+            padding: 5px;
+        }
+
+        .statement-flex-b {
+            display: grid;
+            margin: auto;
+            width: 90%;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            padding: 10px;
+            border-radius: 10px;
+            background-image: url("{% static 'blurry-gradient-haikei.png' %}");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .statement-flex-b h6 {
+            color: white;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .statement-flex-b h4 {
+            font-size: 70px;
+            color: rgb(255, 255, 255);
+            margin: 0;
+            font-family: 'Oswald', sans-serif;
+            padding: 5px;
+        }
+
+        .statement-box {
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .over-dem-all {
+            margin: auto;
+        }
+
+        .statement-inner {
+            text-align: center;
+        }
+
+        .statement-flex-stat {
+            margin: auto;
+            padding: 10px;
+            justify-content: center;
+            width: auto;
+        }
+
+        .statement-flex-stat h2 {
+            font-size: 70px;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        #fix {
+            background-color: rgb(236, 236, 236);
+        }
+
+        #fixing {
+            background-color: #f3f3f3;
+        }
+
+        @media screen and (max-width: 768px) {
+            .statement-flex {
+                grid-template-columns: 1fr;
+            }
+
+            .statement-flex-b {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            #view-details {
+                overflow: auto;
+            }
+
+            .statement-flex-statbox {
+                grid-template-columns: 1fr;
+            }
+
+            .statement-flex-stat-stat {
+                grid-template-columns: 1fr;
+                padding: 5px;
+            }
+        }
+
+        @media screen and (max-width: 240px) {
+            .statement-flex-b {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <br><br><br>
+    <div class="over-dem-all">
+        <div class="statement-flex" id="fixing">
+            <div class="statement-flex-a">
+                <h1>{{ request.user }}'s Account</h1>
+            </div>
+            <div class="statement-flex-b">
+                <div class="statement-box">
+                    <div class="statement-inner">
+                        <h4>{{ NGN }}</h4>
+                        <img src="https://cdn-icons-png.flaticon.com/128/10432/10432229.png" width="30px" alt="Naira">
+                        <h6> Plan{{ NGN|pluralize }}</h6>
+                    </div>
+                </div>
+                <div class="statement-box">
+                    <div class="statement-inner">
+                        <h4>{{ USD }}</h4>
+                        <img src="https://cdn-icons-png.flaticon.com/128/6947/6947548.png" width="30px" alt="Naira">
+                        <h6> Plan{{ USD|pluralize }}</h6>
+                    </div>
+                </div>
+                <div class="statement-box">
+                    <div class="statement-inner">
+                        <h4>{{ GBP }}</h4>
+                        <img src="https://cdn-icons-png.flaticon.com/128/10432/10432516.png"
+                            style="vertical-align: middle; max-width: 30px;" alt="Naira">
+                        <h6> Plan{{ GBP|pluralize }}</h6>
+                    </div>
+                </div>
+                <div class="statement-box">
+                    <div class="statement-inner">
+                        <h4>{{ EUR }}</h4>
+                        <img src="https://cdn-icons-png.flaticon.com/128/10432/10432825.png" width="30px" alt="Naira">
+                        <h6> Plan{{ EUR|pluralize }}</h6>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <br>
+        <div class="statement-flex-stat-stat" id="fix">
+            <div class="statement-flex-stat">
+                <h2 style="margin: auto;">Stats</h2>
+            </div>
+            <div>
+                <canvas id="pie-chart" width="250" height="200"></canvas>
+            </div>
+        </div>
+        <br><br>
+        <div class="statement-flex-statbox">
+            <div class="statement-flex-stat">
+                <h2 style="margin: auto; color: #004777;">Naira</h2>
+                <div>
+                    <canvas id="polar-chart" width="250" height="200"></canvas>
+                </div>
+            </div>
+            <div class="statement-flex-stat">
+                <h2 style="margin: auto; color: #067be7;">Dollar</h2>
+                <div>
+                    <canvas id="polar-chart2" width="250" height="200"></canvas>
+                </div>
+            </div>
+            <div class="statement-flex-stat">
+                <h2 style="margin: auto; color: #2196F3;">Pounds</h2>
+                <div>
+                    <canvas id="polar-chart3" width="250" height="200"></canvas>
+                </div>
+            </div>
+            <div class="statement-flex-stat">
+                <h2 style="margin: auto; color: #b3cbff;">Euro</h2>
+                <div>
+                    <canvas id="polar-chart4" width="250" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="top">
+            <h2 class="plan-head">Transactions</h2>
+        </div>
+        <div id="view-details">
+            {% if trans %}
+            <table class="table table-dark table-striped">
+
+                <thead>
+                    <tr>
+                        <th scope="col">Time</th>
+                        <th scope="col">Plan</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Charges</th>
+                        <th scope="col">Type</th>
+                    </tr>
+                </thead>
+                {% for x in trans %}
+                <tbody>
+                    <tr class="table-primary">
+                        <th scope="row">{{ x.date }} U.T.C</th>
+                        <td>{{ x.plan }}</td>
+                        <td>{{ x.id }}</td>
+                        <td>{{ x.amount|format_decimal }}</td>
+                        <td>{{ x.charge|format_decimal }}</td>
+                        {% if x.transaction_type == 'credit' %}
+                        <td><i class="fa-solid fa-circle-plus" style="color: rgb(8, 187, 8);"></i></td>
+                        {% elif x.transaction_type == 'debit' %}
+                        <td><i class="fa-solid fa-circle-minus" style="color: rgb(0, 119, 255)"></i></td>
+                        {% endif %}
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+            <form method="post">
+                {% csrf_token %}
+                <button style="margin-left: 10px;" class="btn btn-primary">Download As PDF</button>
+            </form>
+            {% else %}
+            <h4>No Transactions made Yet!</h4>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        let NGN = '{{ NGN_PERCENT }}';
+        let USD = '{{ USD_PERCENT }}';
+        let GBP = '{{ GBP_PERCENT }}';
+        let EUR = '{{ EUR_PERCENT }}';
+        let total_NGN = '{{ total_NGN }}';
+        let total_USD = '{{ total_USD }}';
+        let total_GBP = '{{ total_GBP }}';
+        let total_EUR = '{{ total_EUR }}';
+        new Chart(document.getElementById("pie-chart"), {
+            type: 'pie',
+            data: {
+                labels: ['Naira', 'Dollar', 'British Pounds', "Euros"],
+                datasets: [{
+                    label: "Percentage",
+                    backgroundColor: ["#004777", "#067be7", "#2196F3", "#b3cbff"],
+                    data: [NGN, USD, GBP, EUR]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    text: 'Statistics'
+                }
+            }
+        });
+    </script>
+    <script>
+        var labels = JSON.parse('{{ total_NGN|safe }}');
+        var data = JSON.parse('{{ totals_NGN|safe }}');
+        new Chart(document.getElementById("polar-chart"), {
+            type: 'polarArea',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Balance",
+                        backgroundColor: ["#004777", "#067be7", "#2196F3", "#b3cbff", "#c45850"],
+                        data: data,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    text: 'Plan Breakown'
+                }
+            }
+        });
+    </script>
+    <script>
+        var labels = JSON.parse('{{ total_USD|safe }}');
+        var data = JSON.parse('{{ totals_USD|safe }}');
+        new Chart(document.getElementById("polar-chart2"), {
+            type: 'polarArea',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Balance",
+                        backgroundColor: ["#067be7", "#2196F3;", "#b3cbff", "#c45850", "#004777"],
+                        data: data,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    text: 'Plan Breakdown'
+                }
+            }
+        });
+    </script>
+    <script>
+        var labels = JSON.parse('{{ total_GBP|safe }}');
+        var data = JSON.parse('{{ totals_GBP|safe }}');
+        new Chart(document.getElementById("polar-chart3"), {
+            type: 'polarArea',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Balance",
+                        backgroundColor: ["#2196F3", "#b3cbff", "#c45850", "#004777", "#067be7"],
+                        data: data,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    text: 'Plan Breakdown'
+                }
+            }
+        });
+    </script>
+    <script>
+        var labels = JSON.parse('{{ total_EUR|safe }}');
+        var data = JSON.parse('{{ totals_EUR|safe }}');
+        new Chart(document.getElementById("polar-chart4"), {
+            type: 'polarArea',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Balance",
+                        backgroundColor: ["#c45850", "#004777", "#067be7", "#2196F3"],
+                        data: data,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    text: 'Plan Breakdown'
+                }
+            }
+        });
+    </script>
+
+
+
+</body>
+{% endblock %}
+
+</html>

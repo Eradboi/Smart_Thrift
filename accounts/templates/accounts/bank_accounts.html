@@ -1,0 +1,271 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Smart Thrift | Bank Accounts {% endblock %}</title>
+    <style>
+        #add-card {
+            display: none;
+        }
+
+        .center {
+            width: 90%;
+            margin: auto;
+            justify-content: center;
+        }
+
+        .card-itself {
+            border-radius: 10px;
+            width: 70%;
+            height: 30%;
+            background-color: rgb(187, 143, 0);
+            position: relative;
+            overflow: auto;
+        }
+
+        .card-itself2 {
+            border-radius: 10px;
+            width: 70%;
+            height: 30%;
+            background-color: rgb(0, 0, 0);
+            position: relative;
+            overflow: auto;
+        }
+
+        .expiry {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 90%;
+            left: 70%;
+            font-size: 15px;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .expiry2 {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 90%;
+            left: 70%;
+            font-size: 15px;
+            font-weight: 480;
+            font-family: 'Kanit', sans-serif;
+            color: rgb(255, 255, 255);
+        }
+
+        .number {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+            color: white;
+        }
+
+        .number2 {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+            color: white;
+        }
+
+        .number h5 {
+            font-size: auto;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .plan-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #0d7afc;
+            width: 90%;
+            margin: auto;
+        }
+
+        .fund-head {
+            text-align: center;
+            padding: 5px;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .top {
+            padding: 10px;
+            text-align: center;
+
+        }
+
+        .delete_notification:hover {
+            box-shadow: 0px 0px 3px black;
+        }
+
+        @media screen and (max-width: 768px) {
+            .card-itself {
+                border-radius: 10px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% for message in messages %}
+    {% if message.tags == "info" %}
+    <div class="toast show">
+        <div class="toast-header">
+            Notification
+            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">
+            {{ message }}
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    <br>
+    {% if account_nig %}
+    <h2 class="center">Local Bank Accounts</h2>
+    <br>
+    {% for all in account_nig %}
+    <div class="center">
+        <div class="card-itself2">
+            <div class='number2'>
+                <h5>{{ all.account_name }}</h5>
+            </div>
+            <div class='expiry2'>{{ all.account_no }}</div>
+        </div>
+        <br>
+        <form method="POST" action="{% url 'delete_nig_account' all.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary delete_notification"><i class="fa-solid fa-xmark"></i> Remove
+                Account</button>
+        </form>
+    </div>
+    <br>
+    {% endfor %}
+    {% else %}
+    <div class="alert alert-primary" role="alert" style="background-color: rgb(209, 232, 252);">
+        <h6>You don't have any Nigerian accounts saved</h6>
+    </div>
+    {% endif %}
+
+    {% if account_for %}
+    <h2 class="center">Foreign Bank Accounts</h2>
+    <br>
+    {% for all in account_for %}
+    <div class="center">
+        <div class="card-itself2">
+            <div class="card-itself2">
+
+                <small style="color: white;">{{ all.bank_name }}</small>
+            </div>
+            <div class='number2'>
+                <h5>{{ all.beneficiary_name }}</h5>
+            </div>
+            <div class='expiry2'>{{ all.account_number }}</div>
+        </div>
+        <br>
+        <form method="POST" action="{% url 'delete_for_account' all.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary delete_notification"><i class="fa-solid fa-xmark"></i> Remove
+                Account</button>
+        </form>
+    </div>
+    <br>
+    {% endfor %}
+    {% else %}
+    <div class="alert alert-primary" role="alert" style="background-color: rgb(209, 232, 252);">
+        <h6>You don't have any Foreign accounts saved</h6>
+    </div>
+    {% endif %}
+
+    {% if form_nig %}
+    <div class="center">
+        <button onclick="setTimeout(myFunction, 1000)" class="btn btn-dark" type="submit">Add Nigerian Bank
+            Account</button>
+    </div>
+    <div style="display: none;" id="add-account">
+
+        <div class="top">
+            <h1 class="fund-head">Add Bank Account</h1>
+        </div>
+        <form method="post" class="plan-form">
+            {% csrf_token %}
+            {{ form_nig|crispy }}
+            <br>
+            <small>This account will be used for payouts on your plans</small>
+            <button class="btn btn-primary newww" name="nigerian" type="submit">Add Account</button>
+        </form>
+    </div>
+    {% endif %}
+    {% if form_usa %}
+    <br>
+    <div class="center">
+        <button onclick="setTimeout(myFunction2, 1000)" class="btn btn-dark" type="submit">Add USA Bank
+            Account</button>
+    </div>
+    <div style="display: none;" id="add-account2">
+
+        <div class="top">
+            <h1 class="fund-head">Add Bank Account</h1>
+        </div>
+        <form method="post" class="plan-form">
+            {% csrf_token %}
+            {{ form_usa|crispy }}
+            <br>
+            <small>This account will be used for payouts on your plans</small>
+            <button class="btn btn-primary newww" name="usa" type="submit">Add Account</button>
+        </form>
+    </div>
+    {% endif %}
+    {% if form_eu %}
+    <br>
+    <div class="center">
+        <button onclick="setTimeout(myFunction3, 1000)" class="btn btn-dark" type="submit">Add EUR/GBP Bank
+            Account</button>
+    </div>
+    <div style="display: none;" id="add-account3">
+
+        <div class="top">
+            <h1 class="fund-head">Add Bank Account</h1>
+        </div>
+        <form method="post" class="plan-form">
+            {% csrf_token %}
+            {{ form_eu|crispy }}
+            <br>
+            <small>This account will be used for payouts on your plans</small>
+            <button class="btn btn-primary newww" name="eu" type="submit">Add Account</button>
+        </form>
+    </div>
+    {% endif %}
+    <script>
+        function myFunction() {
+            setTimeout(function () {
+                wait.style.display = 'none';
+            }, 10000);
+            document.getElementById("add-account").style.display = 'contents';
+        }
+        function myFunction2() {
+            setTimeout(function () {
+                wait.style.display = 'none';
+            }, 10000);
+            document.getElementById("add-account2").style.display = 'contents';
+        }
+        function myFunction3() {
+            setTimeout(function () {
+                wait.style.display = 'none';
+            }, 10000);
+            document.getElementById("add-account3").style.display = 'contents';
+        }
+    </script>
+</body>
+
+{% endblock %}
+
+</html>

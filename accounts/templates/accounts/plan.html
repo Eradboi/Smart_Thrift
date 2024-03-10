@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'accounts/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Smart Thrift | New Plan {% endblock %}</title>
+    <style>
+        .plan-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #0d7afc;
+            width: 90%;
+            margin: auto;
+        }
+
+        .newww:hover {
+            box-shadow: 0px 0px 3px rgb(83, 83, 83);
+        }
+
+        .newww {
+            margin: 10px;
+            width: max-content;
+        }
+
+        .fund-head {
+            text-align: center;
+            padding: 5px;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .top {
+            padding: 10px;
+            text-align: center;
+
+        }
+    </style>
+</head>
+
+<body>
+    {% if error %}
+    <div class="toast show">
+        <div class="toast-header">
+            Message
+            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">
+            {{ error }}
+        </div>
+    </div>
+    {% endif %}
+    <div>
+        <div class="top">
+            <h1 class="fund-head">Create Plan</h1>
+            <h5>This is a start to your smart saving!</h5>
+        </div>
+    </div>
+    <form method="post" class="plan-form">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button class="btn btn-primary newww" type="submit">Create Plan</button>
+    </form>
+
+</body>
+
+</html>
+{% endblock %}

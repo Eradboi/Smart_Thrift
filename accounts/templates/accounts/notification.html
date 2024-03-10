@@ -1,0 +1,260 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Smart Thrift | Notifications {% endblock %}</title>
+    <style>
+        .bottom-buttons {
+            display: flex;
+            padding: 10px;
+        }
+
+        .text-main {
+            font-family: 'Poppins' sans-serif;
+        }
+
+        .delete_notification {
+            margin-right: 10px;
+
+        }
+
+        .delete_notification:hover {
+            box-shadow: 0px 0px 3px black;
+        }
+
+        .clear-all a {
+            text-decoration: none;
+            font-size: large;
+            padding: 5px;
+        }
+
+        .clear-all a:hover {
+            color: rgb(255, 60, 0);
+            transition: 0.3s ease-in-out;
+        }
+
+        .clear-all {
+            justify-content: end;
+
+        }
+
+        .no-notification {
+            padding: 5px;
+
+            position: relative;
+        }
+
+        .no-notification h2 {
+            padding: 25px;
+
+
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            /* Set the body height to 100% of the viewport height */
+        }
+
+        .no-notification-text {
+            font-family: 'Roboto' sans-serif;
+        }
+
+
+
+        .signal {
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+            position: relative;
+        }
+
+        .notification-list_detail h5 {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .notification-list_content {
+            padding: 5px;
+        }
+
+        .notification-grid {
+            display: flex;
+            gap: 20px;
+        }
+
+        .notification-list_detail {
+            display: grid;
+            gap: 10px;
+            grid-template-columns: .1fr .9fr;
+
+        }
+
+        .tag {
+            display: none;
+        }
+
+        .hover-over:hover .tag {
+            display: block;
+            color: rgb(255, 255, 255);
+            font-size: 10px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .mark-as {
+            display: none;
+        }
+
+        .mark-as-read:hover .mark-as {
+            display: block;
+            color: rgb(255, 255, 255);
+            font-size: 10px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .delete-as {
+            display: none;
+        }
+
+        .delete-as-read:hover .delete-as {
+            display: block;
+            color: rgb(255, 255, 255);
+            font-size: 10px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .notification-ui_dd-content {
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="section-50 bg-light">
+        <div class="container">
+            <h3 class="m-b-50 signal">Notifications {% if count %}<a hx_post="{% url 'clear_notifications' %}"
+                    hx-trigger="click">
+                    {% csrf_token %}
+                    <i class="fa-solid fa-trash-can hover-over position-relative"><span
+                            class="position-absolute top-0 start-100 translate-middle tag badge bg-dark">Delete
+                            All
+                            Notification</span></i></a> </h3>
+            <form action="">
+                {% csrf_token %}
+                <h4 style="color: rgb(202, 201, 201); font-family: 'Poppins', sans-serif; font-size: 18px;">Unread<span
+                        style="padding: 10px; color: #0d7afc;" hx-get="{% url 'read_notification' %}"
+                        hx-trigger="load every 3s"></span>
+                </h4>
+            </form>
+            <div class="notification-ui_dd-content">
+                {% for notification in count %}
+                {% if notification.user == request.user %}
+
+
+                <div class="notification-list notification-list--unread" id="notification-list--unread">
+                    <div class="notification-list_content">
+                        <div class="notification-list_detail">
+                            <div class="notification-grid">
+                                <div>
+                                    {% if notification.status == 'unread' %}<div id="read_sign"
+                                        style=" align-self: center; background-color: #0d7afc; width: 10px; height: 10px; border-radius: 50%;">
+                                    </div>{% endif %}
+                                </div>
+                                {% if notification.category == 'Deposit Success' %}
+                                <div>
+                                    <img src="{% static 'deposit_success.jpg' %}"
+                                        style="width: 50px; border-radius: 10%;" alt="">
+                                </div>
+                                {% elif notification.category == 'Deposit Processing' %}
+                                <div>
+                                    <img src="{% static 'deposit_pending.jpg' %}"
+                                        style="width: 50px; border-radius: 10%;" alt="">
+                                </div>
+                                {% elif notification.category == 'Withdrawal Success' %}
+                                <div>
+                                    <img src="{% static 'withdrawal_success.jpg' %}"
+                                        style="width: 50px; border-radius: 10%;" alt="">
+                                </div>
+                                {% elif notification.category == 'Recurring Deposit Processing' %}
+                                <div>
+                                    <img src="{% static 'reccuring_deposit.jpg' %}"
+                                        style="width: 50px; border-radius: 10%;" alt="">
+                                </div>
+                                {% elif notification.category == 'Auto Saving Plan' %}
+                                <div>
+                                    <img src="{% static 'auto_plan.jpg' %}" style="width: 50px; border-radius: 10%;"
+                                        alt="">
+                                </div>
+                                {% elif notification.category == 'Withdrawal Pending' %}
+                                <div>
+                                    <img src="{% static 'withdrawal_pending.jpg' %}"
+                                        style="width: 50px; border-radius: 10%;" alt="">
+                                </div>
+                                {% elif notification.category == 'Withdrawal Processing' %}
+                                <div>
+                                    <img src="{% static 'withdrawal_pending.jpg' %}"
+                                        style="width: 50px; border-radius: 10%;" alt="">
+                                </div>
+                                {% elif notification.category == 'Plan Deleted' %}
+                                <div>
+                                    <img src="{% static 'plan_deleted.jpg' %}" style="width: 50px; border-radius: 10%;"
+                                        alt="">
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <h5> {{ notification.category }}</h5>
+                                <p class="text-main">{{ notification.content }}</p>
+                                <span style="font-size: 12px;">
+                                    <small hx-get="{% url 'time_posted' notification.id %}"
+                                        hx-trigger="load every 5s"></small></small></span>
+
+                            </div>
+                        </div>
+                        <div class="notification-list_feature-img bottom-buttons">
+                            {% if notification.status == 'unread' %}
+                            <form hx-post="{% url 'notification' %}" hx-target="#read_sign" id="read_sign">
+                                {% csrf_token %}
+                                <input name="read" type="hidden" value="{{ notification.id }}">
+                                <button type="submit" class="btn btn-sm btn-primary delete_notification"><i
+                                        class="fa-solid fa-eye position-relative mark-as-read"><span
+                                            class="position-absolute top-0 start-100 translate-middle mark-as badge bg-dark">Mark
+                                            As Read</span></i> </button>
+                            </form>
+                            {% endif %}
+                            <form method="POST" hx-post="{% url 'delete_notification' notification.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-dark delete_notification"><i
+                                        class="fa-regular fa-trash-can position-relative delete-as-read"><span
+                                            class="position-absolute top-0 start-100 translate-middle delete-as badge bg-dark">Delete
+                                            Notification</span></i> </button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+                {% if response %}
+                <div class="no-notification">
+                    <h2 class="no-notification-text">{{ response }}</h2>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+
+</body>
+
+</html>
+{% endblock %}

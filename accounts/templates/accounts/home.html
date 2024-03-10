@@ -1,0 +1,590 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_filters %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %} Smart Thrift | Home {% endblock %}</title>
+  <style>
+    .top-div {
+      padding: 5px;
+      margin: auto;
+      border-radius: 5px;
+      display: grid;
+      grid-template-columns: 1.5fr 2.5fr;
+      column-gap: 20px;
+    }
+
+    .grid-a h1 {
+      padding: 3px;
+      font-family: 'Kanit', sans-serif;
+      margin-left: 10px;
+
+    }
+
+    .grid-b h2 {
+      font-family: 'Kanit', sans-serif;
+      padding: 3px;
+    }
+
+    .grid-b {
+      width: 80%;
+      margin: auto;
+      background-color: transparent;
+    }
+
+    .money-out-1 {
+      border: 2px solid rgb(209, 208, 208);
+      padding: 10px;
+      background-color: white;
+      border-radius: 5px;
+      max-width: 100%;
+      min-width: max-content;
+      color: rgb(131, 131, 131);
+      display: flex;
+
+    }
+
+    .money-in-1 {
+      border: 2px solid rgb(209, 208, 208);
+      padding: 10px;
+      background-color: white;
+      border-radius: 5px;
+      max-width: 100%;
+      min-width: max-content;
+      color: rgb(131, 131, 131);
+      display: flex;
+
+    }
+
+    .money-in-1:hover {
+      background-color: rgb(230, 230, 230);
+      transition: 0.2s ease-in-out;
+    }
+
+    .money-out-1:hover {
+      background-color: rgb(230, 230, 230);
+      transition: 0.2s ease-in-out;
+    }
+
+    .money-in-1-1 {
+      font-weight: 600;
+      padding: 2px;
+      color: black;
+    }
+
+    .money-out-1-1 {
+      font-weight: 600;
+      padding: 2px;
+      color: black;
+    }
+
+    .money-in-div {
+      justify-content: end;
+      margin-left: auto;
+      padding: 5px;
+    }
+
+    .money-out-div {
+      justify-content: end;
+      margin-left: auto;
+      padding: 5px;
+    }
+
+    .money-out-div i {
+      margin: auto;
+    }
+
+    .money-in-div i {
+      margin: auto;
+    }
+
+    .balance-box-a {
+      color: black;
+    }
+
+    .balance-box {
+      border-radius: 1px solid black;
+      border-radius: 10px;
+      padding: 10px;
+      min-width: 60%;
+      min-height: 40%;
+      margin: auto;
+      text-align: center;
+      justify-content: center;
+      color: white;
+      background-image: url("{% static 'blurry-gradient-haikei.png' %}");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+    }
+
+    .balance-box-b {
+      padding: 5px;
+    }
+
+    .balance-box-b h3 {
+      font-size: 50px;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 800;
+    }
+
+    .plan-box {
+      overflow: auto;
+      padding: 5px;
+      width: 90%;
+      background-image: url("{% static 'low-poly-grid-haikei1.png' %}");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      margin: auto;
+      margin-top: 30px;
+      padding-bottom: 10px;
+      border-radius: 10px;
+    }
+
+    .plan-box h4 {
+      font-family: 'Kanit', sans-serif;
+      padding: 5px;
+      border-radius: 5px;
+      width: max-content;
+      background-color: transparent;
+      backdrop-filter: blur(5px);
+      color: rgb(80, 80, 80)
+    }
+
+    .plan-box-2 {
+      padding: 10px;
+      color: #025974;
+      display: flex;
+      column-gap: 20px;
+      width: 80%;
+      background-color: #eaff8e;
+      margin: auto;
+      overflow: auto;
+      min-height: 150px;
+      border-radius: 4px;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+
+    .plan-box-1 {
+      padding: 10px;
+      overflow: auto;
+      min-height: 150px;
+      color: #025974;
+      display: flex;
+      min-height: 150px;
+      column-gap: 20px;
+      background-color: #8ee5ff;
+      margin: auto;
+      width: 80%;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .plan-box-1 div {
+      font-weight: 700;
+      margin: auto;
+    }
+
+    .plan-box-2 div {
+      font-weight: 700;
+      margin: auto;
+    }
+
+    .plan-box-2 img {
+      border-radius: 5px;
+    }
+
+    .plan-box-1 img {
+      border-radius: 5px;
+    }
+
+    .bottom-icons {
+      margin: auto;
+      width: 80%;
+      padding: 20px;
+      margin-top: 30px;
+      display: flex;
+
+    }
+
+    .icon-a {
+      padding: 10px;
+      background-image: url("{% static 'blurry-gradient-haikei.png' %}");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+
+      border-radius: 10px;
+      width: 30%;
+      overflow: auto;
+      margin: auto;
+    }
+
+    .icon-b {
+      padding: 10px;
+      background-image: url("{% static 'blurry-gradient-haikei.png' %}");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+
+      border-radius: 10px;
+      width: 30%;
+      overflow: auto;
+      margin: auto;
+    }
+
+    .icon-c {
+      padding: 10px;
+      background-image: url("{% static 'blurry-gradient-haikei.png' %}");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+
+      border-radius: 10px;
+      width: 30%;
+      overflow: auto;
+      margin: auto;
+    }
+
+    .bottom-icons .icon-a:hover {
+      border: 2px solid black;
+      transition: 0.1s ease-in-out;
+    }
+
+    .bottom-icons .icon-b:hover {
+      border: 2px solid black;
+      transition: 0.1s ease-in-out;
+    }
+
+    .bottom-icons .icon-c:hover {
+      border: 2px solid black;
+      transition: 0.1s ease-in-out;
+    }
+
+    .bottom-icons div p {
+      margin: auto;
+      text-align: center;
+      padding: 3px;
+      font-weight: 600;
+      font-size: 15px;
+      color: white;
+
+    }
+
+    .bottom-icons div img {
+      width: 50px;
+      height: 50px;
+      padding: 5px;
+      border-radius: 30%;
+    }
+
+    .bottom-icons div div {
+      margin-left: auto;
+      margin-right: auto;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    #toggleBalance {
+      width: 20px;
+      height: 20px;
+    }
+
+    .upper-top {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    @media screen and (max-width: 768px) {
+      .top-div {
+        grid-template-columns: 1fr;
+        background-image: none;
+      }
+
+      .plan-box-1 {
+        width: 90%;
+      }
+
+      .plan-box-2 {
+        width: 90%;
+      }
+
+      .plan-box {
+        width: 95%;
+        background-image: url("{% static 'low-poly-grid-haikei.png' %}");
+      }
+
+      .icon-a {
+        margin: auto;
+        min-height: 160px;
+      }
+
+      .icon-b {
+        margin: auto;
+        min-height: 160px;
+      }
+
+      .icon-c {
+        margin: auto;
+        min-height: 160px;
+      }
+
+      .bottom-icons div img {
+        margin: none;
+      }
+
+      .bottom-icons div div {
+        width: 100%;
+        padding: 10px;
+      }
+
+      .bottom-icons {
+        margin: auto;
+        width: 95%;
+        margin-top: 30px;
+        display: flex;
+        padding: 10px;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+  {% if error %}
+  <div class="toast show">
+    <div class="toast-header">
+      Message
+      <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+    </div>
+    <div class="toast-body">
+      {{ error }}
+    </div>
+  </div>
+  {% endif %}
+  {% for message in messages %}
+  {% if message.tags == "info" %}
+  <div class="toast show">
+    <div class="toast-header">
+      Notification
+      <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+    </div>
+    <div class="toast-body">
+      {{ message }}
+    </div>
+  </div>
+  {% endif %}
+  {% endfor %}
+  {% if user.is_authenticated %}
+
+  <div class="top-div">
+    <div class="grid-a">
+      <div class="upper-top">
+        <div>
+          <h1>Hi {{ request.user }}</h1>
+
+        </div>
+        <div>
+          <i class="fa-solid fa-eye-slash" id="toggleBalance"></i>
+
+        </div>
+      </div>
+      <div>
+        <div id="carouselExample" class="carousel slide" data-ride="carousel">
+          <div class="carousel-inner" id="balanceContainer">
+
+            <!-- Slide 1 -->
+            <div class="carousel-item active">
+              <div class="balance-box" id="box-1">
+                <div class="balance-box-a">
+                  <p>Naira Balance</p>
+                </div>
+                <div class="balance-box-b">
+                  <h3 id="balance">&#x20A6; {{ total_NGN|format_decimal }}</h3>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="carousel-item">
+              <div class="balance-box" id="box-2">
+                <div class="balance-box-a">
+                  <p>Dollar Balance</p>
+                </div>
+                <div class="balance-box-b">
+                  <h3 id="balance">$ {{ total_USD|format_decimal }}</h3>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="carousel-item">
+              <div class="balance-box" id="box-3">
+                <div class="balance-box-a">
+                  <p>British Pounds Balance</p>
+                </div>
+                <div class="balance-box-b">
+                  <h3 id="balance">&#163; {{ total_GBP|format_decimal }}</h3>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slide 4 -->
+            <div class="carousel-item">
+              <div class="balance-box" id="box-4">
+                <div class="balance-box-a">
+                  <p>Euro Balance</p>
+                </div>
+                <div class="balance-box-b">
+                  <h3 id="balance">&euro; {{ total_EUR|format_decimal }}</h3>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Add navigation controls -->
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="grid-b">
+      <div class="money-in">
+        <h2>Money In Today</h2>
+        <div class="money-in-1">
+          <div>
+            <div class="money-in-1-1">
+              {{ deposit_balance }} Increase
+            </div>
+            <div>
+              {{ percent_increase }}% portfolio growth
+            </div>
+          </div>
+          <div class="money-in-div">
+            <i class="fa-solid fa-chart-line" style="color: rgb(2, 151, 34);"></i>
+          </div>
+        </div>
+      </div>
+      <div class="money-out">
+        <h2>Money Out Today</h2>
+        <div class="money-out-1">
+          <div>
+            <div class="money-out-1-1">
+              {{ withdrawal_balance }} Drop
+            </div>
+            <div>
+              {{ percent_decrease }}% portfolio growth
+            </div>
+
+          </div>
+          <div class="money-out-div">
+            <i class="fa-solid fa-chart-line" style="color: red;"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="plan-box">
+    <h4>Smart Save</h4>
+    <a href="{% url 'plans' %}">
+      <div class="plan-box-1">
+        <div class="one">
+          <img src="{% static 'safe.jpg' %}" alt="safe" style="width: 100px;">
+        </div>
+        <div class="2">
+          <h3>Explore Plans</h3>
+
+        </div>
+
+      </div>
+    </a>
+    <a href="{% url 'create_plan' %}">
+      <div class="plan-box-2">
+        <div class="one">
+          <img src="{% static 'flower.jpg' %}" alt="safe" style="width: 100px;">
+        </div>
+        <div class="2">
+          <h3>Create New Plan</h3>
+
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="bottom-icons">
+    <div class="icon-a">
+      <a href="{% url 'create_tp' %}">
+        <div>
+          <img src="{% static 'change-password.jpg' %}" alt=".">
+        </div>
+        <p>Change Trading Password</p>
+      </a>
+    </div>
+    <div class="icon-b">
+      <a href="{% url 'bank_accounts' %}">
+        <div>
+          <img src="{% static 'card.jpg' %}" alt=".">
+        </div>
+        <p>Bank Accounts</p>
+      </a>
+    </div>
+    <div class="icon-c">
+      <a href="{% url 'statement' %}">
+        <div>
+          <img src="{% static 'document.jpg' %}" alt=".">
+        </div>
+        <p>Account Statement</p>
+      </a>
+    </div>
+  </div>
+
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Get the elements
+      var balanceContainer = document.getElementById('balanceContainer');
+      var toggleBalanceIcon = document.getElementById('toggleBalance');
+
+      // Initial state
+      var balanceVisible = true;
+
+      // Function to toggle visibility
+      function toggleBalance() {
+        balanceVisible = !balanceVisible;
+        balanceContainer.style.display = balanceVisible ? 'block' : 'none';
+      }
+      toggleBalanceIcon.addEventListener('click', toggleBalance);
+    });
+  </script>
+  {% else %}
+  <h1>You are currently logged out</h1>
+  <br>
+  <a href="{% url 'user-login' %}">Login</a>
+  </div>
+  {% endif %}
+</body>
+{% endblock %}
+
+</html>

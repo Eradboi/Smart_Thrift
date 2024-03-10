@@ -1,0 +1,717 @@
+{% include 'accounts/loader.html' %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %} Smart Thrift {% endblock %}</title>
+  <link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <script src="https://unpkg.com/htmx.org@1.9.4"
+    integrity="sha384-zUfuhFKKZCbHTY6aRR46gxiqszMk5tcHjsVFxnUo8VMus4kHGVdIYVbOYYNlKmHV"
+    crossorigin="anonymous"></script>
+  <!-- Option 1: Include in HTML -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    em {
+      font-family: 'Roboto', sans-serif;
+      color: black;
+    }
+
+    .home-flex1 {
+      display: flex;
+      gap: 50px;
+      align-items: baseline;
+      justify-content: baseline;
+    }
+
+    .home-head1 {
+      max-width: 100%;
+      font-size: 80px;
+      color: #0d7afc;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+    }
+
+    .initial-div {
+      margin-top: 20px;
+      padding: 5px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 10px;
+      margin: auto;
+      width: 100%;
+      min-height: 60%;
+      padding-bottom: 10px;
+      background-color: rgb(250, 250, 250);
+    }
+
+    .initial-div a {
+      text-decoration: none;
+      color: rgb(146, 146, 146);
+      font-weight: 500;
+
+    }
+
+    .home-button {
+      flex: 1;
+      padding: 10px;
+      width: 90px;
+    }
+
+    .home-head3 {
+      max-width: 400px;
+      font-size: 20px;
+      color: rgb(0, 0, 0);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .home-head12 {
+      text-align: center;
+      margin: auto;
+      font-family: 'Poppins', sans-serif;
+      font-size: 45px;
+      color: #ffffff;
+
+    }
+
+    .quote {
+      color: black;
+      max-width: 200px;
+      font-size: 12px;
+      color: rgb(0, 0, 0);
+      font-family: 'Red Rose', sans-serif;
+    }
+
+
+    .quote-box {
+      position: absolute;
+      top: 80%;
+      left: 25%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      width: max-content;
+      max-width: 200px;
+      height: max-content;
+      background-color: rgb(232, 243, 248);
+      padding: 6px;
+    }
+
+    .grid-ba {
+      position: relative;
+      background-image: url('{% static "man.jpg" %}');
+      overflow-y: visible;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .grid-a {
+      margin-left: 10px;
+      width: 90%;
+      margin: auto;
+    }
+
+    .plans {
+      padding: 5px;
+      background-color: white;
+      position: relative;
+    }
+
+    .plans-top {
+      width: max-content;
+      padding: 5px;
+      margin: auto;
+      margin-top: 10px;
+      text-align: center;
+      border-radius: 5px;
+      background-color: #0d7afc;
+
+    }
+
+    .my-5 a {
+      text-decoration: none;
+    }
+
+    .all-option-box {
+      grid-template-columns: 1fr;
+      width: 95%;
+      margin: auto;
+      margin-top: 90px;
+      background-color: rgb(240, 248, 255);
+    }
+
+    .deposit-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: 95%;
+      margin: auto;
+      gap: 20%;
+      margin-bottom: 120px;
+    }
+
+    .main-hide {
+      display: none;
+    }
+
+    .deposit-options-box {
+      text-align: center;
+      align-items: center;
+      margin-bottom: 50px;
+      padding: 10px;
+    }
+
+    .deposit-top {
+      margin-bottom: 50px;
+    }
+
+    .deposit-top h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 60px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .saving-top h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 60px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .saving-top h6 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      color: rgb(126, 125, 125);
+    }
+
+    .deposit-top h6 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      color: rgb(126, 125, 125);
+    }
+
+    .saving-top {
+      margin-bottom: 50px;
+    }
+
+    .optional-top h2 {
+      font-family: 'Kanit', sans-serif;
+      font-size: 35px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #0d7afc;
+
+    }
+
+    .optional-top h2:hover {
+      color: #ffffff;
+      transition: ease-in-out 0.3s;
+    }
+
+    .id1 {
+      border-radius: 30px;
+      background-color: white;
+      padding: 5px;
+      transition: ease-in-out 0.3s;
+    }
+
+    .id1:hover {
+      box-shadow: 0px 0px 3px #0d7afc;
+      background-color: #ccdff7;
+    }
+
+    .optional-top h6 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      color: rgb(126, 125, 125);
+    }
+
+    .saving-plans-box {
+      text-align: center;
+      align-items: center;
+      padding-bottom: 40px;
+    }
+
+    .security-box {
+      margin-top: 50px;
+      display: flex;
+
+      width: 80%;
+      padding: 15px;
+      margin-left: 10px;
+      margin-bottom: 120px;
+      background-color: rgb(250, 250, 250);
+      border-radius: 5px;
+      gap: 10px;
+      color: black;
+    }
+
+    .security-box h2 {
+      font-family: 'Kanit', sans-serif;
+      font-size: 25px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .security-box h6 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      color: rgb(126, 125, 125);
+    }
+
+    .security-padlock {
+      display: grid;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      border-radius: 10px;
+      background-color: white;
+    }
+
+    .security-padlock i {
+      color: #0d7afc;
+    }
+
+    .last-text {
+      padding: 5px;
+    }
+
+    .quote-hand {
+      font-size: 20px;
+    }
+
+    @media screen and (max-width: 768px) {
+      .home-head1 {
+        max-width: 100%;
+        font-size: 50px;
+      }
+
+      .security-box {
+        width: 95%;
+      }
+
+      .initial-div {
+        grid-template-columns: 1fr;
+        overflow: hidden;
+        column-gap: none;
+      }
+
+      .deposit-top h2 {
+        font-size: 50px;
+        font-weight: 600;
+      }
+
+      .saving-top h2 {
+        font-size: 50px;
+        font-weight: 600;
+      }
+
+      .saving-body {
+        gap: 20px;
+        grid-template-columns: 1fr;
+      }
+
+      .deposit-body {
+        gap: 20px;
+        grid-template-columns: 1fr;
+      }
+
+      .grid-ba {
+        width: 95%;
+        margin: auto;
+        min-height: 300px;
+        margin-top: 20px;
+        overflow: auto;
+      }
+
+      .quote-box {
+        top: 78%;
+        left: 30%;
+      }
+
+      .all-option-box {
+        margin-top: 20px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Red Rose">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rubik Glitch">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril Fatface">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Space Grotesk">
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar bg-light navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+      <img class="fade-in" src="{% static 'logo.png' %}" height="28" alt="Smart Thrift Logo" loading="lazy"
+        style="margin-top: -1px;" />
+      {% if user.is_authenticated %}
+      <a class="navbar-brand" href="{% url 'home' %}">Smart Thrift</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'profilepage' %}"><span hx-get="/picture_view2" hx-trigger="load"></span>My
+              Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}" tabindex="-1" aria-disabled="true">Logout</a>
+          </li>
+          {% if user.is_superuser %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin:index' %}" tabindex="-1" aria-disabled="true">Admin</a>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'notification' %}">
+              <form action="">
+                {% csrf_token %}
+                <i hx-get="/read_notification/" hx-trigger="load" hx-target="#badge" type="button"
+                  class="fa-solid fa-bell position-relative" style="color: #0d7afc;"> <span style="font-size: 8px;"
+                    id="badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    <span class="visually-hidden">unread messages</span>
+                </i>
+              </form>
+            </a>
+          </li>
+
+        </ul>
+      </div>
+      {% else %}
+      <a class="navbar-brand" href="{% url 'register' %}">Sign Up</a>
+      {% endif %}
+    </div>
+  </nav>
+  <br><br><br><br>
+  {% block content %}
+  <style>
+    body {
+      background-color: rgb(240, 248, 255);
+    }
+
+    @media screen and (max-width: 768px) {}
+  </style>
+  <div class="cover-all">
+    {% if not user.is_authenticated %}
+    <div class="alert alert-primary" role="alert" style="background-color: rgb(209, 232, 252);">
+      Save money the Smart Way with Smart Thrift! <a href="{% url 'about_us' %}">Learn More</a>
+    </div>
+    {% endif %}
+    <br><br><br>
+    <div class="initial-div">
+      <div class="grid-a">
+        <h1 class="home-head1">Save Money</h1>
+        <h1 class="home-head1">The <em>Smart</em> Way</h1>
+        <h3 class="home-head3">Join <em>Smart Thrift</em> today!</h3>
+        <br>
+        <div class="home-flex1">
+          <div>
+            <button class="home-button btn " style="background-color: #000000" type="button"><a
+                href="{% url 'register' %}" style="color: #ffffff;">Sign Up</a></button>
+          </div>
+          <div>
+            <button class="home-button btn " style="background-color: #000000" type="button"><a href="{% url 'login' %}"
+                style="color: white;">Login</a></button>
+          </div>
+        </div>
+      </div>
+      <div class="grid-ba">
+        <div class="quote-box">
+          <h6 class="quote">
+            <span class="quote-hand">❝</span> Where every penny counts, and every decision leads to a wealthier
+            tomorrow. Make your
+            money work for you, guided by wisdom and driven by purpose. Thrive financially, one smart choice at a
+            time. <span class="quote-hand">❞</span>
+          </h6>
+
+        </div>
+
+      </div>
+    </div>
+    <div class="security-box">
+      <div class="security-padlock">
+        <i class="fa-solid fa-vault"></i>
+      </div>
+      <div class="security-text">
+        <h2>Money Security Assured</h2>
+        <h6>All transactions are securely initiated and processed by Flutterwave.</h6>
+      </div>
+    </div>
+    <div class="all-option-box">
+      <div class="deposit-options-box">
+        <div class="deposit-top">
+          <h2>Deposit Options</h2>
+          <h6>Explore Options Detailed For You</h6>
+        </div>
+        <div class="deposit-body">
+          <div class="optional-deposit id1">
+            <div class="optional-top">
+              <h2>Optional Deposit</h2>
+              <h6>Accumulate savings through single, lump-sum contributions to your
+                savings plans.</h6>
+            </div>
+            <div>
+              <img width="70%" src="{% static 'plan-a.png' %}" alt=".">
+            </div>
+          </div>
+          <div class="automatic-deposit id1">
+            <div class="optional-top">
+              <h2>Automatic Deposit</h2>
+              <h6>Accumulate savings through single, lump-sum contributions to your
+                savings plans.</h6>
+            </div>
+            <div>
+              <img width="70%" src="{% static 'plan-b.png' %}" alt=".">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="saving-plans-box">
+        <div class="saving-top">
+          <h2>Saving Options</h2>
+          <h6>Explore Our various Saving Plans</h6>
+        </div>
+        <div class="deposit-body">
+          <div class="monthly-saving id1">
+            <div class="optional-top">
+              <h2>Monthly Plan</h2>
+              <h6>Withdraw your funds after 30 days</h6>
+            </div>
+            <div>
+              <img width="70%" src="{% static 'plan-c.png' %}" alt=".">
+            </div>
+          </div>
+          <div class="quarterly-saving id1">
+            <div class="optional-top">
+              <h2>Quarterly Plan</h2>
+              <h6>Withdraw your funds after 90 days</h6>
+            </div>
+            <div>
+              <img width="70%" src="{% static 'plan-d.png' %}" alt=".">
+            </div>
+          </div>
+          <div class="half-year-saving id1">
+            <div class="optional-top">
+              <h2>Half Year Plan</h2>
+              <h6>Withdraw your funds after 180 days</h6>
+            </div>
+            <div>
+              <img width="70%" src="{% static 'plan-e.png' %}" alt=".">
+            </div>
+          </div>
+          <div class="yearly-saving id1">
+            <div class="optional-top">
+              <h2>Yearly Plan</h2>
+              <h6 class="last-text">Withdraw your funds after 365 days (yearly) or 1095 days (three years)</h6>
+            </div>
+            <div>
+              <img width="70%" src="{% static 'plan-f.png' %}" alt=".">
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <br><br><br><br><br>
+  <footer class="text-lg-start text-white main-hide" style="background-color: #0d7afc">
+    <!-- Grid container -->
+    <div class="container p-5">
+      <!--Grid row-->
+      <div class="row my-5">
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+
+          <div
+            class="rounded-circle bg-white shadow-1-strong d-flex align-items-center justify-content-center mb-4 mx-auto"
+            style="width: 150px; height: 150px;">
+            <img src="{% static 'logo.png' %}" height="70" alt="logo" loading="lazy" />
+          </div>
+
+          <p class="text-center">Money Saving Plaform With Secure Deposit Using Flutterwave</p>
+
+          <ul class="list-unstyled d-flex flex-row justify-content-center">
+            <li>
+              <a class="text-white px-2" href="#!">
+                <i class="fab fa-facebook-square"></i> FaceBook
+              </a>
+            </li>
+            <li>
+              <a class="text-white px-2" href="#!">
+                <i class="fab fa-instagram"></i> Instagram
+              </a>
+            </li>
+            <li>
+              <a class="text-white ps-2" href="#!">
+                <i class="fab fa-twitter"></i> X/Twitter
+              </a>
+            </li>
+          </ul>
+
+        </div>
+
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase mb-4">Smart Thrift</h5>
+
+          <ul class="list-unstyled">
+            <li class="mb-2">
+              <a href="{% url 'about_us' %}" class="text-white"><i class="fa-solid fa-circle-info"></i> About</a>
+            </li>
+            <li class="mb-2">
+              <a href="{% url 'register' %}" class="text-white"><i class="fa-solid fa-user-plus"></i> Sign Up</a>
+            </li>
+            <li class="mb-2">
+              <a href="{% url 'login' %}" class="text-white"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+            </li>
+            <li class="mb-2">
+              <a href="https://www.flutterwave.com" class="text-white"><img
+                  src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Flutterwave_Logo.png" alt="."
+                  width="120px"></a>
+            </li>
+          </ul>
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase mb-4">Contact</h5>
+
+          <ul class="list-unstyled">
+            <li>
+              <p><i class="fas fa-map-marker-alt pe-2"></i>FUTA South Gate, Ondo State, Nigeria</p>
+            </li>
+            <li>
+              <p><i class="fas fa-phone pe-2"></i>08139993668</p>
+            </li>
+            <li>
+              <p><i class="fas fa-envelope pe-2 mb-0"></i><a style="color: white;"
+                  href="mailto:smartthriftsavings@gmail.com">smartthriftsavings@gmail.com</a></p>
+            </li>
+          </ul>
+        </div>
+        <!--Grid column-->
+      </div>
+      <!--Grid row-->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+      © <span hx-get="/year/" hx-trigger="load"></span> Copyright:
+      <a class="text-white" href="{% url 'base' %}">SmartThrift.com.ng</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
+
+  {% endblock %}
+  <!-- Remove the container if you want to extend the Footer to full width. -->
+  <br><br><br><br><br>
+
+  <footer class="text-lg-start text-white  main-footer" style="background-color: #0d7afc">
+    <!-- Grid container -->
+    <div class="container p-5">
+      <!--Grid row-->
+      <div class="row my-5">
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+
+          <div
+            class="rounded-circle bg-white shadow-1-strong d-flex align-items-center justify-content-center mb-4 mx-auto"
+            style="width: 150px; height: 150px;">
+            <img src="{% static 'logo.png' %}" height="70" alt="logo" loading="lazy" />
+          </div>
+
+          <p class="text-center">Money Saving Plaform With Secure Deposit Using Flutterwave</p>
+
+          <ul class="list-unstyled d-flex flex-row justify-content-center">
+            <li>
+              <a class="text-white px-2" href="#!">
+                <i class="fab fa-facebook-square"></i> FaceBook
+              </a>
+            </li>
+            <li>
+              <a class="text-white px-2" href="#!">
+                <i class="fab fa-instagram"></i> Instagram
+              </a>
+            </li>
+            <li>
+              <a class="text-white ps-2" href="#!">
+                <i class="fab fa-twitter"></i> X/Twitter
+              </a>
+            </li>
+          </ul>
+
+        </div>
+
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase mb-4">Smart Thrift</h5>
+
+          <ul class="list-unstyled">
+            <li class="mb-2">
+              <a href="{% url 'about_us' %}" class="text-white"><i class="fa-solid fa-circle-info"></i> About</a>
+            </li>
+            <li class="mb-2">
+              <a href="{% url 'register' %}" class="text-white"><i class="fa-solid fa-user-plus"></i> Sign Up</a>
+            </li>
+            <li class="mb-2">
+              <a href="{% url 'login' %}" class="text-white"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+            </li>
+            <li class="mb-2">
+              <a href="https://www.flutterwave.com" class="text-white"><img
+                  src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Flutterwave_Logo.png" alt="."
+                  width="120px"></a>
+            </li>
+          </ul>
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase mb-4">Contact</h5>
+
+          <ul class="list-unstyled">
+            <li>
+              <p><i class="fas fa-map-marker-alt pe-2"></i>FUTA South Gate, Ondo State, Nigeria</p>
+            </li>
+            <li>
+              <p><i class="fas fa-phone pe-2"></i>08139993668</p>
+            </li>
+            <li>
+              <p><i class="fas fa-envelope pe-2 mb-0"></i><a style="color: white;"
+                  href="mailto:smartthriftsavings@gmail.com">smartthriftsavings@gmail.com</a></p>
+            </li>
+          </ul>
+        </div>
+        <!--Grid column-->
+      </div>
+      <!--Grid row-->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+      © <span hx-get="/year/" hx-trigger="load"></span> Copyright:
+      <a class="text-white" href="{% url 'base' %}">SmartThrift.com.ng</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
+
+</body>
+
+</html>

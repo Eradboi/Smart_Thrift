@@ -1,0 +1,97 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %} Smart Thrift | Trading Password {% endblock %}</title>
+  <style>
+    body {
+      background-image: url("{% static 'polygon-scatter-haikei.png' %}");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+
+    }
+
+    .complete-head {
+      padding: 10px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .trading-body {
+      background-color: white;
+      padding: 10px;
+      width: 95%;
+    }
+  </style>
+</head>
+
+<body>
+  {% if error %}
+  <div class="toast show">
+    <div class="toast-header">
+      Password
+      <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+    </div>
+    <div class="toast-body">
+      {{ error }}
+    </div>
+  </div>
+  {% endif %}
+  <div class="trading-body">
+    <div class="complete-head">
+      <h1>To Complete Deposit to {{ word.name }}</h1>
+    </div>
+    <div class="container height-100 d-flex justify-content-center align-items-center">
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="position-relative">
+          <div class="card p-2 text-center">
+            <h6>Enter Trading Password</h6>
+            <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+              <input class="m-2 text-center form-control rounded" type="text" id="first" name="7" maxlength="1"
+                style="background-color: rgb(216, 239, 248);" />
+              <input class="m-2 text-center form-control rounded" type="text" id="second" name="8" maxlength="1"
+                style="background-color: rgb(216, 239, 248);" />
+              <input class="m-2 text-center form-control rounded" type="text" id="third" name="9" maxlength="1"
+                style="background-color: rgb(216, 239, 248);" />
+              <input class="m-2 text-center form-control rounded" type="text" id="fourth" name="10" maxlength="1"
+                style="background-color: rgb(216, 239, 248);" />
+              <input class="m-2 text-center form-control rounded" type="text" id="fifth" name="11" maxlength="1"
+                style="background-color: rgb(216, 239, 248);" />
+              <input class="m-2 text-center form-control rounded" type="text" id="sixth" name="12" maxlength="1"
+                style="background-color: rgb(216, 239, 248);" />
+            </div>
+            <div class="mt-4">
+              <button class="btn btn-primary px-4 validate" type="submit">Confirm</button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <br>
+    </div>
+    <div class="card-2">
+      <div class="content d-flex justify-content-center align-items-center">
+        <small style="width: 300px; font-weight: 500; text-align: center;">Your Trading Password is used in making
+          payments and it should
+          be kept secure</small>
+        <form action="{% url 'create_tp' %}" method="post">
+          {% csrf_token %}
+          <button class="btn btn-light" name="new" type="submit">Change Password</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+</body>
+{% endblock %}
+
+</html>

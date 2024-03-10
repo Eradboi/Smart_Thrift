@@ -1,0 +1,930 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_filters %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Smart Thrift | Plan {% endblock %}</title>
+    <style>
+        .one {
+            padding: 5px;
+            margin: 10px;
+
+        }
+
+        .balance-box {
+            padding: 5px;
+            width: max-content;
+
+        }
+
+        .balance-box .one {
+            text-transform: uppercase;
+            font-family: 200;
+            font-size: 15px;
+            margin-bottom: none;
+            color: rgb(202, 202, 202);
+            font-family: 'Poppins', sans-serif;
+
+        }
+
+        .balance-box .two {
+            font-weight: 700;
+            margin: auto;
+            padding: 2px;
+            font-size: 30px;
+            text-align: center;
+        }
+
+        .one a {
+            text-decoration: none;
+            font-size: 15px;
+            color: white;
+            padding: 3px;
+            font-weight: 500;
+        }
+
+        .form-outline {
+            width: 60%;
+        }
+
+        .form-cover {
+            padding: 7px;
+            margin-top: 30px;
+            border-radius: 5px;
+            background-color: rgb(234, 246, 255);
+        }
+
+        .form-cover h5 {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .outline {
+            width: 40%;
+            margin-left: 5px;
+            padding: 10px;
+            margin-top: 30px;
+            border-radius: 5px;
+            background-color: white;
+            box-shadow: 0px 0px 4px rgb(202, 202, 202);
+        }
+
+        #add-funds {
+            display: none;
+        }
+
+        #add-funds small {
+            color: (202, 202, 202);
+        }
+
+        .currency {
+            padding: 5px;
+            color: rgb(170, 170, 170);
+            width: max-content;
+            font-family: 'Poppins', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .currency p {
+            font-family: 'Kanit', sans-serif;
+            margin: auto;
+            font-size: 20px;
+            color: rgb(170, 170, 170);
+            font-weight: 600;
+        }
+
+        .trans-div {
+            display: grid;
+            align-items: center;
+            margin: auto;
+            grid-template-columns: 1fr;
+            padding: 5px;
+            margin-top: 20px;
+        }
+
+        .trans-div button {
+            width: max-content;
+        }
+
+        .plan-detail-text {
+            font-weight: 700;
+            color: rgb(214, 213, 213);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #view-details {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .plan {
+            overflow: auto;
+            min-width: 80%;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 10px;
+            height: auto;
+            padding: 10px;
+            border: 2px solid #0d7afc;
+            background-color: #0d7afc;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            align-items: center;
+            box-shadow: 0px 0px 3px #0d7afc;
+        }
+
+        .plan-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #0d7afc;
+            width: 90%;
+            margin: auto;
+        }
+
+        #plan-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #0d7afc;
+            width: 90%;
+            margin: auto;
+        }
+
+        .under-plan {
+            color: #0d7afc;
+            font-family: 'Kanit', sans-serif;
+            border-radius: 5px;
+            font-size: 70px;
+            text-align: center;
+            padding: 10px;
+            width: 90%;
+            height: 90%;
+            background-color: aliceblue;
+        }
+
+        small {
+            font-size: 15px;
+        }
+
+        #withdrawals {
+            display: none;
+        }
+
+        #update {
+            display: none;
+        }
+
+        #keep_plan {
+            display: none;
+        }
+
+        .keep {
+            display: grid;
+            grid-template-columns: 1fr;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #0d7afc;
+            width: 90%;
+            margin: auto;
+        }
+
+        .reccuring-box {
+            width: max-content;
+            min-width: 50%;
+            border-radius: 5px;
+            background-image: url("{% static 'blurry-gradient-haikei.png' %}");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            padding: 5px;
+            display: flex;
+            gap: 10%;
+            align-items: center;
+            box-shadow: 0px 0px 5px black;
+        }
+
+        .reccuring-box h3 {
+            font-family: 'Oswald', sans-serif;
+            color: white;
+        }
+
+        .reccuring-box h6 {
+            font-size: 12px;
+            font-family: 'Poppins', sans-serif;
+            color: rgb(233, 233, 233);
+
+        }
+
+        .money-in-div i {
+            margin: auto;
+        }
+
+        .money-in-div {
+            justify-content: end;
+            margin-left: auto;
+            padding: 5px;
+        }
+
+        .money-in-1-1 {
+            font-weight: 600;
+            padding: 2px;
+            color: black;
+        }
+
+        .money-in-1 {
+            box-shadow: 0px 0px 4px rgb(209, 208, 208);
+            padding: 10px;
+            border-radius: 5px;
+            width: 40%;
+
+            display: flex;
+            gap: 5%;
+            align-items: center;
+        }
+
+        .icon-show {
+            color: #070707;
+        }
+
+
+        .money-in-1 small {
+            font-size: 12px;
+            color: rgb(131, 131, 131);
+        }
+
+        .money-in-1:hover {
+            background-color: rgb(230, 230, 230);
+            transition: 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .money-in-1 .fa-arrow-right {
+            padding: 5px;
+            color: rgb(0, 119, 255);
+            size: 40px;
+            margin-left: auto;
+        }
+
+        .money-in-1 .fa-arrow-right:hover {
+            transform: rotate(180deg);
+        }
+
+        @media screen and (max-width: 768px) {
+
+            .balance-box {
+                top: 10px;
+            }
+
+            .balance-box .one {
+                font-size: smaller;
+            }
+
+            .outline {
+                width: 95%;
+                margin-left: 5px;
+                padding: 5px;
+            }
+
+            .reccuring-box {
+                width: 95%;
+            }
+
+            .money-in-1 {
+                width: 90%;
+            }
+
+            .form-outline {
+                margin: auto;
+            }
+
+            .trans-div {
+                overflow: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == "info" %}
+    <div class="toast show">
+        <div class="toast-header">
+            Notification
+            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">
+            {{ message }}
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    <br><br>
+    {% endif %}
+    <div class="one">
+        {% if plan %}
+        <div class="balance-box">
+            <p class="one">Total Balance:</p>
+            {% if plan.currency == 'USD' %}
+            <p class="two">$ <span hx-get="{% url 'check_balance' plan.id %}" hx-trigger="load">loading...</span></p>
+            {% endif %}
+            {% if plan.currency == 'NGN' %}
+            <p class="two">&#x20A6; <span hx-get="{% url 'check_balance' plan.id %}" hx-trigger="load">loading...</span>
+            </p>
+            {% endif %}
+            {% if plan.currency == 'GBP' %}
+            <p class="two">&#163; <span hx-get="{% url 'check_balance' plan.id %}" hx-trigger="load">loading...</span>
+            </p>
+            {% endif %}
+            {% if plan.currency == 'EUR' %}
+            <p class="two">&euro; <span hx-get="{% url 'check_balance' plan.id %}" hx-trigger="load">loading...</span>
+            </p>
+            {% endif %}
+        </div>
+        <div>
+            <div class="stat-box">
+                {% if plan.balance != None %}
+                {% if plan.type == 'optional' %}
+                <canvas id="line-chart" width="600" height="250"></canvas>
+                {% elif autoplan %}
+                {% if plan.status == False %}
+                <div class="reccuring-box">
+                    <div>
+                        <h3>RECCURING PLAN</h3>
+                    </div>
+                    <div>
+                        <h6>{{ autoplan.amount }} {{ plan.type }}</h6>
+                        <h6>Locked Until {{ date }}</h6>
+                    </div>
+                </div>
+                <br>
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                {% if plan.balance == 0.00 %}
+                <div class="alert alert-primary" role="alert"
+                    style="background-color: rgb(209, 232, 252); width: 50%; margin-top: 20px;">
+                    <a style="color: #070707;" href=" {% url 'delete_plan' plan.id %}">
+                        <h6 hx-get="{% url 'warnings' %}" hx-trigger="load delay:7s"><i
+                                class="fa-solid fa-circle-xmark"></i> Delete My Plan</h6>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            {% if plan.status == False %}
+            {% if plan.type == 'optional' %}
+            <div>
+                <div class="outline">
+
+                    <div class="currency">
+                        <p>{{ plan.currency }} PLAN</p>
+                    </div>
+                    <p class="plan-detail-text">Locked until {{ date }}</p>
+                </div>
+                <br>
+                <div onclick="setTimeout(myFunction, 1000)" class="money-in">
+                    <div class="money-in-1">
+                        <div class="icon-show">
+                            <i class="fa-solid fa-2x fa-money-bill-trend-up"></i>
+                        </div>
+                        <div>
+                            <div class="money-in-1-1">
+                                Add
+                                Funds
+                            </div>
+                            <div>
+                                <small>Deposit Cash into your Plans</small>
+                            </div>
+                        </div>
+                        <div class="arrow money-in-div">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div id="add-funds">
+                <h4 style="font-family: 'Poppins', sans-serif;">Enter Amount</h4>
+                <form method="post" action="{% url 'plan_deposit' plan.id %}">
+                    {% csrf_token %}
+                    <input type="text" placeholder="e.g 500 (no commas)" name="amount">
+                    <br>
+                    {% if plan.currency == 'NGN' %}
+                    <small>Maximum of &#x20A6;100,000</small>
+                    {% endif %}
+                    {% if plan.currency == 'USD' %}
+                    <small>Maximum of $1,000</small>
+                    {% endif %}
+                    {% if plan.currency == 'EUR' %}
+                    <small>Maximum of &euro;1,000</small>
+                    {% endif %}
+                    {% if plan.currency == 'GBP' %}
+                    <small>Maximum of &#163;1,000</small>
+                    {% endif %}
+                    <br>
+
+                    <button onclick="setTimeout(myFunction2, 1000)" class="btn btn-dark" type="submit">Add
+                        Funds</button>
+                </form>
+            </div>
+            <div class="form-cover">
+
+                <h5>Change Deposit Frequency</h5>
+                <form method="post" class="form-outline">
+                    {% csrf_token %}
+                    <div>
+                        {{ form|crispy }}
+                        <br>
+                        <button name="change" class="btn btn-dark" type="submit">Make Changes</button>
+                    </div>
+                </form>
+            </div>
+
+            {% else %}
+            <div>
+                {% if autoplan %}
+
+                <a href="{% url 'plan_cancel' plan.id %}">
+                    <div class="money-in">
+                        <div class="money-in-1">
+                            <div class="icon-show">
+                                <i class="fa-solid fa-2x fa-ban"></i>
+                            </div>
+                            <div>
+                                <div class="money-in-1-1">
+                                    Cancel Auto Plan
+                                </div>
+                                <div>
+                                    <small>Delete your current reccuring deposit</small>
+                                </div>
+                            </div>
+                            <div class="arrow money-in-div">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <div onclick="setTimeout(myFunction6, 1000)" class="money-in">
+                    <div class="money-in-1">
+                        <div class="icon-show">
+                            <i class="fa-solid fa-2x fa-pen-to-square"></i>
+                        </div>
+                        <div>
+                            <div class="money-in-1-1">
+                                Update Auto
+                                Plan
+                            </div>
+                            <div>
+                                <small>Make changes to your automatic plan</small>
+                            </div>
+                        </div>
+                        <div class="arrow money-in-div">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+
+
+                <br>
+                <div id="update">
+                    <h4 style="font-family: 'Poppins', sans-serif;">Enter Amount</h4>
+                    <form method="post" action="{% url 'plan_deposit' plan.id %}">
+                        {% csrf_token %}
+                        <input type="text" placeholder="e.g 500 (no commas)" name="update_amount">
+                        <br>
+                        {% if plan.currency == 'NGN' %}
+                        <small>Maximum of &#x20A6;100,000</small>
+                        {% endif %}
+                        {% if plan.currency == 'USD' %}
+                        <small>Maximum of $1,000</small>
+                        {% endif %}
+                        {% if plan.currency == 'EUR' %}
+                        <small>Maximum of &euro;1,000</small>
+                        {% endif %}
+                        {% if plan.currency == 'GBP' %}
+                        <small>Maximum of &#163;1,000</small>
+                        {% endif %}
+                        <br>
+                        <button onclick="setTimeout(myFunction7, 1000)" class="btn btn-dark" type="submit">Initiate
+                            Subscription</button>
+                    </form>
+                </div>
+
+                {% else %}
+                <div onclick="setTimeout(myFunction, 1000)" class="money-in">
+                    <div class="money-in-1">
+                        <div class="icon-show">
+                            <i class="fa-regular fa-2x fa-credit-card"></i>
+                        </div>
+                        <div>
+                            <div class="money-in-1-1">Create Auto Plan</div>
+                            <div>
+                                <small>Create a reccuring payment with your card</small>
+                            </div>
+                        </div>
+                        <div class="arrow money-in-div">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+                {% endif %}
+                <div id="add-funds">
+                    <form method="post" action="{% url 'plan_deposit' plan.id %}">
+                        {% csrf_token %}
+                        <input type="text" placeholder="e.g 500 (no commas)" name="amount">
+                        <br>
+                        {% if plan.currency == 'NGN' %}
+                        <small>Maximum of &#x20A6;100,000</small>
+                        {% endif %}
+                        {% if plan.currency == 'USD' %}
+                        <small>Maximum of $1,000</small>
+                        {% endif %}
+                        {% if plan.currency == 'EUR' %}
+                        <small>Maximum of &euro;1,000</small>
+                        {% endif %}
+                        {% if plan.currency == 'GBP' %}
+                        <small>Maximum of &#163;1,000</small>
+                        {% endif %}
+                        <br>
+                        <button onclick="setTimeout(myFunction2, 1000)" class="btn btn-dark" type="submit">Initiate
+                            Subscription</button>
+                    </form>
+                </div>
+                <br>
+                <small>After making a transaction with your card, we will automatically remove the amount you
+                    entered on a {{ plan.type }} basis
+                </small>
+            </div>
+            <br>
+            {% if not autoplan %}
+            <div class="form-cover">
+
+                <h5>Change Deposit Frequency</h5>
+                <form method="post" class="form-outline" action="{% url 'plan_list' plan.id %}">
+                    {% csrf_token %}
+                    <div>
+                        {{ form|crispy }}
+                        <br>
+                        <button name="change" class="btn btn-dark" type="submit">Save Changes</button>
+                    </div>
+                </form>
+                <small>NOTE: After changing your deposit method, Reinitiate a new subscription plan to take
+                    effect</small>
+            </div>
+            {% endif %}
+            {% endif %}
+            {% else %}
+            <div style="padding: 10px; border-radius: 5px; background-color: #d3e7ff; width: 95%;">
+                <span
+                    style="color: rgb(17, 17, 17); font-family: 'Poppins', sans-serif; font-size: 20px; font-weight: 500;">Your
+                    Plan: {{ plan.name }} is now
+                    matured!</span>
+            </div>
+            <br>
+            <div>
+                <div onclick="setTimeout(myFunction4, 1000)" class="money-in">
+                    <div class="money-in-1">
+                        <div class="icon-show">
+                            <i class="fa-solid fa-2x fa-money-bill-transfer"></i>
+                        </div>
+                        <div>
+                            <div class="money-in-1-1">Withdraw</div>
+                            <div>
+                                <small>Withdraw Cash to your bank account</small>
+                            </div>
+                        </div>
+                        <div class="arrow money-in-div">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div onclick="setTimeout(myFunction8, 1000)" class="money-in">
+
+                    <div class="money-in-1">
+                        <div class="icon-show">
+                            <i class="fa-solid fa-2x fa-vault"></i>
+                        </div>
+                        <div>
+                            <div class="money-in-1-1">Keep Saving</div>
+                            <div>
+                                <small>Continue saving at your desired pace</small>
+                            </div>
+                        </div>
+                        <div class="arrow money-in-div">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </div>
+
+                </div>
+                <br>
+                <div id="keep_plan">
+
+
+                    <div class="keep">
+                        <form method="post">
+                            {% csrf_token %}
+                            <h3 style="font-family: 'Kanit', sans-serif;">Choose Your Frequency</h3>
+                            <br>
+                            {{ form|crispy }}
+                            <br>
+                            <button onclick="setTimeout(myFunction9, 1000)" class="btn btn-dark" name="continue">Renew
+                                Plan</button>
+                        </form>
+                    </div>
+                </div>
+                <div id="withdrawals">
+                    {% if plan.currency == 'NGN' %}
+                    {% if accounts_nig %}
+                    <br>
+                    <form id="plan-form" method="post">
+                        {% csrf_token %}
+                        <h3 style="font-family: 'Kanit', sans-serif;">Make Withdrawal</h3>
+                        <label for="">Amount</label>
+                        <input name="amount" type="text" placeholder="Enter an amount, no commas e.g 500">
+                        <label for="">Bank Account</label>
+                        <select name="all_ngn">
+                            {% for acc in accounts_nig %}
+                            <option value="{{ acc.account_no }}">{{ acc.account_no }} --
+                                {{acc.account_name }}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <button type="submit" class="btn btn-dark" style="width: max-content;"
+                            name="withdrawal">Withdraw
+                            Funds</button>
+                    </form>
+                    {% else %}
+                    <div>
+                        <a style="color: blue;" href="{% url 'bank_accounts' %}"><button class="btn btn-dark">Add
+                                Account for
+                                Withdrawal</button></a>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                    {% if plan.currency == 'USD' %}
+                    {% if accounts_usd %}
+                    <br>
+                    <form id="plan-form" method="post">
+                        {% csrf_token %}
+                        <h3 style="font-family: 'Kanit', sans-serif;">Withdrawal</h3>
+                        <label for="">Amount</label>
+                        <input name="amount" type="text" placeholder="Enter an amount, no commas e.g 500">
+                        <label for="">Bank Account</label>
+                        <select name="all_usd">
+                            {% for accounts in accounts_usd %}
+                            <option value="{{ accounts.account_number }}">{{ accounts.account_number }}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <button type="submit" class="btn btn-dark" style="width: max-content;"
+                            name="withdrawal">Withdraw Funds</button>
+
+                    </form>
+                    {% else %}
+                    <div>
+                        <a style="color: blue;" href="{% url 'bank_accounts' %}"><button class="btn btn-dark">Add USD
+                                Account for
+                                Withdrawal</button></a>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                    {% if plan.currency == 'GBP' %}
+                    {% if accounts_gbp %}
+                    <br>
+                    <form id="plan-form" method="post">
+                        {% csrf_token %}
+                        <h3 style="font-family: 'Kanit', sans-serif;">Withdrawal</h3>
+                        <label for="">Amount</label>
+                        <input name="amount" type="text" placeholder="Enter an amount, no commas e.g 500">
+                        <label for="">Bank Account</label>
+                        <select name="all_eu">
+                            {% for accounts in accounts_gbp %}
+                            <option value="{{ accounts.account_number }}">{{ accounts.account_number }}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <button type="submit" class="btn btn-dark" style="width: max-content;"
+                            name="withdrawal">Withdraw Funds</button>
+
+                    </form>
+                    {% else %}
+                    <div>
+                        <a style="color: blue;" href="{% url 'bank_accounts' %}"><button class="btn btn-dark">Add GBP
+                                Account for
+                                Withdrawal</button></a>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                    {% if plan.currency == 'EUR' %}
+                    {% if accounts_eur %}
+                    <br>
+                    <form id="plan-form" method="post">
+                        {% csrf_token %}
+                        <h3 style="font-family: 'Kanit', sans-serif;">Withdrawal</h3>
+                        <label for="">Amount</label>
+                        <input name="amount" type="text" placeholder="Enter an amount, no commas e.g 500">
+                        <label for="">Bank Account</label>
+                        <select name="all_eu">
+                            {% for accounts in accounts_eur %}
+                            <option value="{{ accounts.account_number }}">{{ accounts.account_number }}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <button type="submit" class="btn btn-dark" style="width: max-content;"
+                            name="withdrawal">Withdraw Funds</button>
+                    </form>
+                    {% else %}
+                    <div>
+                        <a style="color: blue;" href="{% url 'bank_accounts' %}"><button class="btn btn-dark">Add EUR
+                                Account for
+                                Withdrawal</button></a>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="trans-div">
+            <div style="display: flex;">
+                <button onclick="setTimeout(myFunction3, 1000)" class="btn btn-dark" type="submit">Show
+                    Transactions</button>
+                <a href="{% url 'check_transactions' plan.id %}"><button class="btn btn-primary"
+                        type="submit">Transaction
+                        Tracking</button></a>
+            </div>
+            <br>
+            <div id="view-details">
+                {% if plan.type == 'optional' %}
+                {% if trans %}
+                <table class="table table-dark table-striped">
+
+                    <thead>
+                        <tr>
+                            <th scope="col">Time</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Charges</th>
+                            <th scope="col">Type</th>
+                        </tr>
+                    </thead>
+                    {% for x in trans %}
+                    <tbody>
+                        <tr class="table-primary">
+                            <th scope="row">{{ x.date }} U.T.C</th>
+                            <td>{{ x.id }}</td>
+                            <td>{{ x.amount|format_decimal }}</td>
+                            <td>{{ x.charge|format_decimal }}</td>
+                            {% if x.transaction_type == 'credit' %}
+                            <td><i class="fa-solid fa-circle-plus" style="color: rgb(8, 187, 8);"></i></td>
+                            {% elif x.transaction_type == 'debit' %}
+                            <td><i class="fa-solid fa-circle-minus" style="color: rgb(0, 119, 255)"></i></td>
+                            {% endif %}
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+                {% else %}
+                <h4>No Transactions made Yet!</h4>
+                {% endif %}
+            </div>
+            {% else %}
+            {% if trans %}
+            <table class="table table-dark table-striped">
+
+                <thead>
+                    <tr>
+
+                        <th scope="col">ID</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Charges</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Count</th>
+                    </tr>
+                </thead>
+                {% for x in trans %}
+                <tbody>
+                    <tr class="table-primary">
+                        <th scope="row">{{ x.id }}</th>
+                        <td>{{ x.amount|format_decimal }}</td>
+                        <td>{{ x.charge|format_decimal }}</td>
+                        {% if x.transaction_type == 'credit' %}
+                        <td><i class="fa-solid fa-circle-plus" style="color: rgb(8, 187, 8);"></i></td>
+                        {% elif x.transaction_type == 'debit' %}
+                        <td><i class="fa-solid fa-circle-minus" style="color: rgb(0, 119, 255)"></i></td>
+                        {% endif %}
+                        <td>{{ count }}</td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+    <div class="trans-div">
+        <p>NOTE: All transactions attract a fee. You can read more on Flutterwave's billing options <a
+                style="color: #0d7afc;" href="https://flutterwave.com/ng/pricing">here</a></p>
+    </div>
+    </div>
+    <script>
+        // Using Chrtjs for statistics
+        let twelvehrs = '{{ twelvehrs }}';
+        let twentyfourhrs = '{{ twentyfourhrs }}';
+        let oneweek = '{{ oneweek }}';
+        let twoweek = '{{ twoweek }}';
+        let fourweek = '{{ fourweek }}';
+        new Chart(document.getElementById("line-chart"), {
+            type: 'line',
+            data: {
+                labels: ['4 weeks', '2 weeks', '1 week', '24hrs', '12hrs'],
+                datasets: [{
+                    data: [fourweek, twoweek, oneweek, twentyfourhrs, twelvehrs],
+                    label: "Growth",
+                    borderColor: "#3e95cd",
+                    backgroundColor: ['rgb(234, 246, 255)'],
+                    fill: true
+                },
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Plan Growth'
+                }
+            }
+        });
+    </script>
+
+    <script>
+        function myFunction() {
+            setTimeout(function () {
+                wait.style.display = 'none';
+            }, 10000);
+            document.getElementById("add-funds").style.display = 'contents';
+        }
+        function myFunction2() {
+            setTimeout(function () {
+                wait.style.display = 'none';
+            }, 10000);
+            document.getElementById("add-funds").style.display = 'none';
+        }
+        function myFunction3() {
+            setTimeout(function () {
+                wait.style.display = 'none';
+            }, 10000);
+            document.getElementById("view-details").style.display = 'contents';
+        }
+        function myFunction4() {
+            setTimeout(function () {
+                wait.style.display = 'none';
+            }, 10000);
+            document.getElementById("withdrawals").style.display = 'contents';
+        }
+        function myFunction5() {
+            setTimeout(function () {
+                wait.style.display = 'none';
+            }, 10000);
+            document.getElementById("withdraw-funds").style.display = 'none';
+        }
+        function myFunction6() {
+            setTimeout(function () {
+                wait.style.display = 'none';
+            }, 10000);
+            document.getElementById("update").style.display = 'contents';
+        }
+        function myFunction7() {
+            setTimeout(function () {
+                wait.style.display = 'none';
+            }, 10000);
+            document.getElementById("update").style.display = 'none';
+        }
+        function myFunction8() {
+            setTimeout(function () {
+                wait.style.display = 'none';
+            }, 10000);
+            document.getElementById("keep_plan").style.display = 'contents';
+        }
+        function myFunction9() {
+            setTimeout(function () {
+                wait.style.display = 'none';
+            }, 10000);
+            document.getElementById("keep_plan").style.display = 'none';
+        }
+    </script>
+    {% endblock %}
+</body>
+
+</html>

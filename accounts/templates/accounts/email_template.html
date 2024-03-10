@@ -1,0 +1,57 @@
+<html>
+
+<head>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: white;
+      color: #333;
+    }
+
+    .the-div {
+      padding: 5px;
+      border-radius: 10px;
+      background-color: antiquewhite;
+    }
+
+    h2 {
+      font-weight: bolder;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <img height="33" src="https://res.cloudinary.com/dqihcau09/image/upload/v1705198303/logo_l1kgdq.png" alt="Our Logo">
+  </div>
+  <h1>Otp Verification for {{ recipient_name|safe }}</h1>
+  <hr>
+  <div class="the-div">
+
+    <p>Your One Time Password Verification Code is
+    <h1>{{ custom_message|safe }}</h1>
+    </p>
+    <br>
+    <small>The code expires in 10 minutes</small>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <p>If this request <em>wasn't initiated by you</em>, no worries your account is secure.</p>
+            <p>Thank you for saving with Smart Thrift</p>
+            <p>The Smart Thrift Team.</p>
+          </td>
+        </tr>
+        <tr>
+          <td height="20" style="line-height:20px">&nbsp;</td>
+        </tr>
+        <tr>
+          <td height="20" style="line-height:20px">&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>

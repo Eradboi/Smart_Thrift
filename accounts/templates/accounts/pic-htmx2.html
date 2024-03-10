@@ -1,0 +1,19 @@
+{% if picture %}
+{% for pic in picture %}
+{% if pic.user == request.user %}
+<style>
+    .profile-image {
+    width: 100%; /* Set the width to 100% to scale the image to the width of its container */
+    max-width: 200px; /* Set a maximum width to prevent the image from becoming too large */
+    height: auto; /* Allow the height to adjust automatically based on the aspect ratio */
+    border-radius: 50%; /* Apply a rounded shape for a circular profile picture */
+}
+</style>
+<img src="{{ pic.image.url }}" alt="profile pic"
+  class="rounded-circle img-fluid profile-image" style="width: 30px; height: 30px;">
+  {% endif %}
+{% endfor %}
+{% else %}
+<img src="https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/no-profile-picture-icon.png" alt="profile pic"
+  class="rounded-circle img-fluid profile-image" style="width: 30px; height: 30px;">
+  {% endif %}

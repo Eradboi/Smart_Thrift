@@ -1,0 +1,75 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %} Smart Thrift | One Time Password {% endblock %}</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      /* Set the body height to 100% of the viewport height */
+    }
+  </style>
+</head>
+
+<body>
+  {% if error %}
+  <div class="toast show">
+    <div class="toast-header">
+      OTP Message
+      <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+    </div>
+    <div class="toast-body">
+      {{ error }}
+    </div>
+  </div>
+  {% endif %}
+  <div class="container height-100 d-flex justify-content-center align-items-center">
+    <form hx-post="/otp_button/" hx-trigger="keyup" hx-target="#button_here" method="post">
+      {% csrf_token %}
+      <div class="position-relative">
+        <div class="card p-2 text-center">
+          <h6>Please enter the one time password <br> to verify your account</h6>
+          <div> <span>A code has been sent to your email address</span> <small>It is valid for 10 minutes</small> </div>
+          <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+            <input class="m-2 text-center form-control rounded" type="text" id="first" name="1" maxlength="1"
+              style="background-color: rgb(216, 239, 248);" />
+            <input class="m-2 text-center form-control rounded" type="text" id="second" name="2" maxlength="1"
+              style="background-color: rgb(216, 239, 248);" />
+            <input class="m-2 text-center form-control rounded" type="text" id="third" name="3" maxlength="1"
+              style="background-color: rgb(216, 239, 248);" />
+            <input class="m-2 text-center form-control rounded" type="text" id="fourth" name="4" maxlength="1"
+              style="background-color: rgb(216, 239, 248);" />
+            <input class="m-2 text-center form-control rounded" type="text" id="fifth" name="5" maxlength="1"
+              style="background-color: rgb(216, 239, 248);" />
+            <input class="m-2 text-center form-control rounded" type="text" id="sixth" name="6" maxlength="1"
+              style="background-color: rgb(216, 239, 248);" />
+          </div>
+          <div class="mt-4" id="button_here">
+
+          </div>
+        </div>
+      </div>
+    </form>
+    <br>
+  </div>
+  <div class="card-2">
+    <div class="content d-flex justify-content-center align-items-center">
+      <form action="{% url 'otp' %}" method="post">
+        {% csrf_token %}
+        <span>Didn't get the code</span> <button class="btn btn-light" name="new" type="submit">Resend OTP</button>
+    </div>
+    </form>
+  </div>
+  </div>
+</body>
+{% endblock %}
+
+</html>

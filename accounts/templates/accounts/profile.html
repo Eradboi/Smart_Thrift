@@ -1,0 +1,120 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %} My Profile {% endblock %}</title>
+  <style>
+    .profile-image {
+      width: 100%;
+      /* Set the width to 100% to scale the image to the width of its container */
+      max-width: 200px;
+      /* Set a maximum width to prevent the image from becoming too large */
+      height: auto;
+      /* Allow the height to adjust automatically based on the aspect ratio */
+      border-radius: 50%;
+      /* Apply a rounded shape for a circular profile picture */
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      /* Set the body height to 100% of the viewport height */
+    }
+  </style>
+</head>
+
+<body>
+  {% for message in messages %}
+  {% if message.tags == "success" %}
+  <div class="toast show">
+    <div class="toast-header">
+      Notification
+      <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+    </div>
+    <div class="toast-body">
+      {{ message }}
+    </div>
+  </div>
+  {% endif %}
+  {% endfor %}
+  <section>
+    <div class="container py-5 bg-white">
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+            <ol class="breadcrumb mb-0">
+              <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body text-center">
+              <div hx-get="/picture_view" hx-trigger="load">Profile Picture</div>
+              <h5 class="my-3"></h5>{{ user.username }}</h5>
+              <p class="text-muted mb-1"><i class="fa-solid fa-at"></i> {{ user.email }}</p>
+              <p class="text-muted mb-1"><i class="fa-solid fa-phone"></i> {{ user.phone }}</p>
+              <p class="text-muted mb-4"><i class="fa-solid fa-id-card"></i> {{ user.category }}</p>
+              <div class="d-flex justify-content-center mb-2">
+                <button type="button" class="btn btn-primary"><a href="{% url 'editprofile' %}"
+                    style="color: white; text-decoration: none;">Edit Details</a></button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h2>My Saving Plans</h2>
+          </div>
+          <div class="card mb-4 mb-lg-0">
+            <div class="card-body p-0">
+              <ul class="list-group list-group-flush rounded-3">
+                {% for plan in plans %}
+                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                  <i class="fa-solid fa-money-bill-trend-up"></i>
+                  <p class="mb-0">{{ plan.name }}</p>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Date Joined</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ user.date_joined }} UTC</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Last Logged In</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ user.last_login }} UTC</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+</body>
+{% endblock %}
+
+</html>

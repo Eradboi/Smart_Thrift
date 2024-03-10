@@ -1,0 +1,89 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Transactions Tracking {% endblock %}</title>
+</head>
+<style>
+    .plan-head {
+        font-family: 'Kanit', sans-serif;
+    }
+
+    #plan-form {
+        display: grid;
+        grid-template-columns: 1fr;
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid #0d7afc;
+        width: 90%;
+        margin: auto;
+    }
+</style>
+
+<body>
+    <div>
+        <br><br><br>
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == "info" %}
+        <div class="toast show">
+            <div class="toast-header">
+                Notification
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                {{ message }}
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <br><br>
+        {% endif %}
+        <div>
+            {% if display %}
+            <div class="alert alert-primary" role="alert" style="background-color: rgb(209, 232, 252);">
+                {{ display }}
+            </div>
+            {% endif %}
+            <form id="plan-form" method="post">
+                {% csrf_token %}
+                <h3 class="plan-head">For Withdrawals</h3>
+                <input name="withdrawal_id" type="text" id="form12" class="form-control"
+                    placeholder="Enter Transfer ID" />
+
+                <br>
+                <div style="display: flex; gap: 30px;">
+                    <button name="retry" class="btn btn-sm btn-dark" type="submit">Retry Transaction</button>
+                    <button name="status" class="btn btn-sm btn-primary" type="submit">Check Status</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br>
+    <div>
+        <div>
+            <form id="plan-form" method="post">
+                {% csrf_token %}
+                <h3 class="plan-head">For Deposits</h3>
+
+                <input name="deposit_id" type="text" id="form12" class="form-control"
+                    placeholder="Enter Transaction Reference" />
+
+                <br>
+                <div style="display: flex; gap: 30px;">
+                    <button name="tx_ref" class="btn btn-sm btn-primary" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+</body>
+{% endblock %}
+
+</html>

@@ -1,0 +1,66 @@
+<style>
+    /* styles.css */
+    #loader-wrapper {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: transparent;
+        backdrop-filter: blur(10px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #loader {
+        border: 10px solid #000000;
+        border-top: 10px solid #0d7afc;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+    }
+
+    .loader-section {
+        position: fixed;
+        top: 0;
+        width: 51%;
+        height: 100%;
+        background: transparent;
+    }
+
+    .section-left {
+        left: 0;
+    }
+
+    .section-right {
+        right: 0;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+<!-- loader.html -->
+<div id="loader-wrapper">
+    <div id="loader"></div>
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
+</div>
+
+<script>
+    // scripts.js
+    document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+            document.getElementById('loader-wrapper').style.display = 'none';
+        }, 1000); // Adjust the time as needed
+    });
+
+</script>

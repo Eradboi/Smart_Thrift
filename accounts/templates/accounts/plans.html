@@ -1,0 +1,213 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_filters %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Smart Thrift | My Plans {% endblock %}</title>
+    <style>
+        .plan-box {
+            width: 80%;
+            margin: auto;
+            border-radius: 5px;
+            height: auto;
+            padding: 10px;
+        }
+
+        .plan-box a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .plan {
+            overflow: auto;
+            min-width: 80%;
+            width: max-content;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 2fr 1.5fr 0.5fr 0.5fr;
+            gap: 20px;
+            width: auto;
+            height: auto;
+            padding: 10px;
+            border: 2px solid #0d7afc;
+            background-color: white;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            align-items: center;
+        }
+
+        .plan .two {
+            align-self: center;
+            margin: auto;
+        }
+
+        .plan .fa-arrow-right {
+            border-radius: 50%;
+            padding: 5px;
+            background-color: rgb(0, 119, 255);
+            color: white;
+            size: 40px;
+            transition: cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .plan .fa-arrow-right:hover {
+            transform: rotate(180deg);
+        }
+
+        .plan h3 {
+            text-transform: uppercase;
+            font-weight: 400;
+            font-size: 13px;
+            padding: 5px;
+            margin: auto;
+        }
+
+        .plan h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin: auto;
+        }
+
+        .plan-head {
+            font-size: 50px;
+            width: max-content;
+            margin-left: 10%;
+            font-family: 'Kanit', sans-serif;
+            padding: 10px;
+        }
+
+        .top {
+            margin-bottom: 10px;
+        }
+
+        .over-them-all {
+            position: relative;
+        }
+
+        .plus {
+            position: absolute;
+            top: 120%;
+            left: 90%;
+            box-shadow: 0px 0px 1.5px rgb(63, 63, 63);
+            transform: translate(-50%, -50%);
+            background-color: #0d7afc;
+            border-radius: 50%;
+            padding: 20px;
+
+        }
+
+        .plus i {
+            color: white;
+        }
+
+        .fa-lock {
+            color: rgb(165, 164, 164);
+        }
+
+        .fa-lock-open {
+            color: rgb(31, 221, 110);
+        }
+
+        .tops {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .tops a {
+            text-decoration: none;
+        }
+
+        @media screen and (max-width: 768px) {
+            .plan {
+                min-width: 95%;
+            }
+
+            .top {
+                margin-right: 2.5%;
+            }
+
+            .plan-box {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% for message in messages %}
+    {% if message.tags == "info" %}
+    <div class="toast show">
+        <div class="toast-header">
+            Notification
+            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">
+            {{ message }}
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    <div class="over-them-all">
+
+        {% if plans %}
+        <div class="top">
+            <h1 class="plan-head">Plans</h1>
+        </div>
+        {% for x in plans %}
+        <div class="plan-box bg-light">
+            <a href="{% url 'plan_list' x.id %}">
+                <div class="plan">
+                    <div>
+                        <h3>{{ x.name }}</h3>
+                    </div>
+                    {% if x.currency == 'USD' %}
+                    <p class="two">${{ x.balance|format_decimal }}</p>
+                    {% endif %}
+                    {% if x.currency == 'NGN' %}
+                    <p class="two">&#x20A6;{{ x.balance|format_decimal }}</p>
+                    {% endif %}
+                    {% if x.currency == 'GBP' %}
+                    <p class="two">&#163;{{ x.balance|format_decimal }}</p>
+                    {% endif %}
+                    {% if x.currency == 'EUR' %}
+                    <p class="two">&euro;{{ x.balance|format_decimal }}</p>
+                    {% endif %}
+                    {% if x.status == False %}
+                    <div>
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    {% else %}
+                    <div>
+                        <i class="fa-solid fa-lock-open"></i>
+                    </div>
+                    {% endif %}
+                    <div class="arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+        <div class="plus">
+            <a href="{% url 'create_plan' %}">
+                <i class="fa-solid fa-plus"></i>
+            </a>
+        </div>
+        {% else %}
+        <div class="tops">
+            <h1 class="plan-head">You are yet to start a saving plan</h1>
+            <h4><a href="{% url 'create_plan' %}">Create One Here</a></h4>
+        </div>
+        {% endif %}
+    </div>
+</body>
+<br><br><br><br><br>
+{% endblock %}
+
+</html>
